@@ -1,0 +1,28 @@
+---
+tenants:
+  - name: test
+    vrfs:
+      - name: default
+        svis:
+          - id: 30
+            name: vlan_30
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.30.2/26
+            profile: enable_pim
+              
+            ip_virtual_router_addresses: 
+              - 100.0.30.2
+
+svi_profiles:
+  - profile: enable_pim
+    structured_config:
+      pim:
+       ipv4:
+         sparse_mode: true
+
+
+#custom_structured_configuration_router_msdp:
+#  peers:
+#    - ipv4_address: 1.0.0.3
+#      local_interface: loopback0

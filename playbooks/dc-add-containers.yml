@@ -1,0 +1,26 @@
+---
+- name: Playbook to test creating containers.
+  hosts: cv_server
+  connection: local
+  gather_facts: no
+  vars:
+    # Container definition
+    containers_provision:
+        SPINES:
+          parentContainerName: Tenant
+        DC1_SPINES:
+          parentContainerName: SPINES
+        LEAFS:
+          parentContainerName: Tenant
+        DC1_LEAF1:
+          parentContainerName: LEAFS
+        DC1_LEAF2:
+          parentContainerName: LEAFS
+        DC1_LEAF3:
+          parentContainerName: LEAFS
+  tasks:
+    - name: "Create Containers topology on {{inventory_hostname}}"
+      arista.cvp.cv_container_v3:
+        topology: '{{containers_provision}}'
+        state: present
+

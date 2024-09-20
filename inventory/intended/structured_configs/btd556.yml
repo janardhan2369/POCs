@@ -1,0 +1,281 @@
+hostname: btd556
+is_deployed: true
+router_bgp:
+  as: '65001'
+  router_id: 1.0.0.2
+  bgp:
+    default:
+      ipv4_unicast: false
+  maximum_paths:
+    paths: 4
+    ecmp: 4
+  updates:
+    wait_install: true
+  peer_groups:
+  - name: IPv4-UNDERLAY-PEERS
+    type: ipv4
+    maximum_routes: 12000
+    send_community: all
+  address_family_ipv4:
+    peer_groups:
+    - name: IPv4-UNDERLAY-PEERS
+      activate: true
+  redistribute_routes:
+  - source_protocol: connected
+    route_map: RM-CONN-2-BGP
+  neighbors:
+  - ip_address: 100.64.102.19
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btd452
+    description: btd452_Ethernet15/1
+  - ip_address: 100.64.102.21
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btd452
+    description: btd452_Ethernet16/1
+  - ip_address: 100.64.102.23
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btd452
+    description: btd452_Ethernet17/1
+  - ip_address: 100.64.102.27
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btp351
+    description: btp351_Ethernet15/1
+  - ip_address: 100.64.102.29
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btp351
+    description: btp351_Ethernet16/1
+  - ip_address: 100.64.102.31
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btp351
+    description: btp351_Ethernet17/1
+  - ip_address: 100.64.102.3
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btd558
+    description: btd558_Ethernet15/1
+  - ip_address: 100.64.102.7
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btd558
+    description: btd558_Ethernet17/1
+  - ip_address: 100.64.102.5
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btd558
+    description: btd558_Ethernet16/1
+  - ip_address: 100.64.102.11
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btd453
+    description: btd453_Ethernet15/1
+  - ip_address: 100.64.102.13
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btd453
+    description: btd453_Ethernet16/1
+  - ip_address: 100.64.102.15
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: btd453
+    description: btd453_Ethernet17/1
+service_routing_protocols_model: multi-agent
+ip_routing: true
+router_multicast:
+  ipv4:
+    routing: true
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+spanning_tree:
+  mode: none
+vrfs:
+- name: MGMT
+  ip_routing: false
+management_interfaces:
+- name: Management1
+  description: oob_management
+  shutdown: false
+  vrf: MGMT
+  ip_address: 172.28.138.47/20
+  gateway: null
+  type: oob
+management_api_http:
+  enable_vrfs:
+  - name: MGMT
+  enable_https: true
+ethernet_interfaces:
+- name: Ethernet17/1
+  peer: btd452
+  peer_interface: Ethernet15/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTD452_Ethernet15/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.18/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet17/5
+  peer: btd452
+  peer_interface: Ethernet16/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTD452_Ethernet16/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.20/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet18/1
+  peer: btd452
+  peer_interface: Ethernet17/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTD452_Ethernet17/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.22/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet18/5
+  peer: btp351
+  peer_interface: Ethernet15/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTP351_Ethernet15/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.26/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet19/1
+  peer: btp351
+  peer_interface: Ethernet16/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTP351_Ethernet16/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.28/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet19/5
+  peer: btp351
+  peer_interface: Ethernet17/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTP351_Ethernet17/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.30/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet20/1
+  peer: btd558
+  peer_interface: Ethernet15/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTD558_Ethernet15/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.2/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet20/5
+  peer: btd558
+  peer_interface: Ethernet17/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTD558_Ethernet17/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.6/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet21/1
+  peer: btd558
+  peer_interface: Ethernet16/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTD558_Ethernet16/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.4/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet21/5
+  peer: btd453
+  peer_interface: Ethernet15/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTD453_Ethernet15/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.10/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet22/1
+  peer: btd453
+  peer_interface: Ethernet16/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTD453_Ethernet16/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.12/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet22/5
+  peer: btd453
+  peer_interface: Ethernet17/1
+  peer_type: l3leaf
+  description: P2P_LINK_TO_BTD453_Ethernet17/1
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 100.64.102.14/31
+  pim:
+    ipv4:
+      sparse_mode: true
+loopback_interfaces:
+- name: Loopback0
+  description: EVPN_Overlay_Peering
+  shutdown: false
+  ip_address: 1.0.0.2/32
+prefix_lists:
+- name: PL-LOOPBACKS-EVPN-OVERLAY
+  sequence_numbers:
+  - sequence: 10
+    action: permit 1.0.0.0/24 eq 32
+route_maps:
+- name: RM-CONN-2-BGP
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+router_pim_sparse_mode:
+  ipv4:
+    rp_addresses:
+    - address: 2.0.0.1
+metadata:
+  platform: default

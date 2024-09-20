@@ -1,0 +1,11 @@
+Type, Node,Node Interface,Leaf IP Address,Peer Type,Peer Node,Peer Interface,Peer IP Address
+l3leaf,cal371,Ethernet49/1,172.31.255.1/31,spine,hs426,Ethernet49/1,172.31.255.0/31
+l3leaf,cal371,Ethernet50/1,172.31.255.3/31,spine,hs427,Ethernet49/1,172.31.255.2/31
+l3leaf,cal372,Ethernet49/1,172.31.255.5/31,spine,hs426,Ethernet50/1,172.31.255.4/31
+l3leaf,cal372,Ethernet50/1,172.31.255.7/31,spine,hs427,Ethernet50/1,172.31.255.6/31
+l3leaf,cal375,Ethernet49/1,172.31.255.17/31,spine,hs426,Ethernet53/1,172.31.255.16/31
+l3leaf,cal375,Ethernet50/1,172.31.255.19/31,spine,hs427,Ethernet53/1,172.31.255.18/31
+spine,hs426,Ethernet51/1,172.31.255.8/31,l3leaf,hs429,Ethernet49/1,172.31.255.9/31
+spine,hs426,Ethernet52/1,172.31.255.12/31,l3leaf,hs523,Ethernet49/1,172.31.255.13/31
+spine,hs427,Ethernet51/1,172.31.255.10/31,l3leaf,hs429,Ethernet50/1,172.31.255.11/31
+spine,hs427,Ethernet52/1,172.31.255.14/31,l3leaf,hs523,Ethernet50/1,172.31.255.15/31

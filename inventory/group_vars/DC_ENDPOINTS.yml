@@ -1,0 +1,24 @@
+---
+leaf_endpoints:
+
+- name: STORAGE
+  adapters:
+  - mode: trunk
+    switch_ports:
+    - Ethernet5/1
+    - Ethernet5/1
+    switches:
+    - btd453
+    - btd558
+    vlans: 30-39
+    port_channel:
+      mode: active
+
+- name: LEAF11_6_1
+  adapters:
+  - mode: trunk
+    switch_ports:
+    - Ethernet6/1
+    switches:
+    - btd452
+    vlans: 10-19

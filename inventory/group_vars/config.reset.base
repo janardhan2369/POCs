@@ -1,0 +1,55 @@
+---
+  prompt: "%H.%D{{'{%'}}H:%M:%S{{'}'}}%v%P"
+  vrf: "MGMT"
+  mgmt_gateway: 10.240.113.129
+  mgmt_interface: Management1
+  mgmt_interface_vrf: MGMT
+  cvaddr: 10.240.113.184
+  logging_server: "poc-services-stdpoc3.sjc.aristanetworks.com"
+  alias:
+    - "cc clear counters"
+    - "senz show interface counter error | nz"
+    - "shmc show int | awk '/^[A-Z]/ { intf = $1 } /, address is/ { print intf, $6 }'"
+    - "snz show interface counter | nz"
+    - "spc show port-channel %1 detail all"
+    - "sqnz show interface counter queue | nz"
+    - "srnz show interface counter rate | nz"
+  routing_model: "multi-agent"
+  logging_format: "timestamp traditional year timezone"
+  nameserver: 
+    - 172.22.60.20
+  dns_domain: "sjc.aristanetworks.com"
+  ntpserver:
+    - "poc-ntp.sjc.aristanetworks.com"
+  snmpserver:
+    community: "public"
+    permissions: "ro"
+  spanning_tree: 
+    mode: "mstp"
+  aaa:
+    authorization: "exec deafult local"
+    root_secret: "eossuper"
+    authentication_policy: "local allow-nopassword-remote-login"
+    usernames:
+      "admin":
+        password: "nopassword"
+        priv: 15
+        role: "network-admin"
+      "cvpadmin":
+        password: "eossuper"
+        priv: 15
+        role: "network-admin"
+  clock:
+    timezone: "US/Pacific"
+  routes:
+    - prefix: 10.80.0.0
+      length: 12
+      next_hop: 172.28.128.1
+    - prefix: 10.240.0.0
+      length: 12
+      next_hop: 172.28.128.1
+    - prefix: 172.16.0.0
+      length: 12
+      next_hop: 172.28.128.1
+    
+

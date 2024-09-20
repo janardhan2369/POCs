@@ -1,0 +1,51 @@
+# file to perform re-ztp of a provisioned dut
+- hosts: DC
+  name: "re-ZTP"
+  gather_facts: no
+  vars:
+    - ansible_network_os: eos
+    - ansible_user: admin
+    - ansible_password: ""
+    - ansible_httpapi_use_ssl: True
+    - ansible_httpapi_validate_certs: False
+    - ansible_become: yes
+    - ansible_become_method: enable
+
+#  tasks:
+#  - name: Register config_reset variables
+#    include_vars:
+#      file: "{{ lookup('env','PWD') }}/inventory/group_vars/config.reset.yml"
+#      name: config_reset
+
+#  - name: Register backbone variables
+#    include_vars:
+#      file: "{{ lookup('env', 'PWD') }}/inventory/group_vars/backbone.yml"
+#      name: backbone
+ 
+  - name: Accept SSH key for each host 
+    connection: local
+    shell: "ssh-keyscan {{ inventory_hostname|lower }} >> ~/.ssh/known_hosts"
+    register: keyscan
+    changed_when: keyscan.rc != 0
+
+  - name: back up config to flash before returning DUT back to ZTP mode
+    vars:
+      - ansible_connection: httpapi
+      - ansible_network_os: eos
+    eos_config:
+      backup: yes
+      backup_options:
+        filename: "{{ inventory_hostname_short }}_base.configlet"
+        dir_path: "{{ lookup('env','PWD') }}/configs/template_generated"
+      lines: 
+        - copy running-config flash:backup-config_pre-ztp.cfg
+
+  - name: Remove startup-config and zerotouch-config, reboot
+    vars:
+      - ansible_connection: httpapi
+    eos_config:
+      lines:
+      - "delete startup-config"
+      - "delete flash:zerotouch-config"
+      - "reload now"
+    ignore_errors: yes

@@ -1,0 +1,45 @@
+---
+cvp_devices:
+  - fqdn: btd452
+    parentContainerName: LEAF11
+    configlets:
+      - Fabric_AVD_btd452
+  - fqdn: btd453
+    parentContainerName: LEAF32
+    configlets:
+      - Fabric_AVD_btd453
+  - fqdn: btd555
+    parentContainerName: SPINE1
+    configlets:
+      - Fabric_AVD_btd555
+  - fqdn: btd556
+    parentContainerName: SPINE2
+    configlets:
+      - Fabric_AVD_btd556
+  - fqdn: btd558
+    parentContainerName: LEAF31
+    configlets:
+      - Fabric_AVD_btd558
+  - fqdn: btp351
+    parentContainerName: LEAF21
+    configlets:
+      - Fabric_AVD_btp351
+cvp_containers:
+  Fabric-AVD:
+    parentContainerName: Tenant
+  LEAF11:
+    parentContainerName: LEAFS
+  LEAF21:
+    parentContainerName: LEAFS
+  LEAF31:
+    parentContainerName: LEAFS
+  LEAF32:
+    parentContainerName: LEAFS
+  LEAFS:
+    parentContainerName: Fabric-AVD
+  SPINE1:
+    parentContainerName: SPINES
+  SPINE2:
+    parentContainerName: SPINES
+  SPINES:
+    parentContainerName: Fabric-AVD

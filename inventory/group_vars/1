@@ -1,0 +1,80 @@
+
+fabric_name: Fabric-AVD
+underlay_multicast: true
+#underlay_routing_protocol: ospf
+bgp-as: 65001
+
+spine:
+  defaults:
+    platform: default
+    bgp_as: 65001
+    loopback_ipv4_pool: 100.64.100.0/24
+  nodes:
+    - name: btd555
+      id: 1
+      mgmt_ip: 172.28.138.46/20
+    - name: btd556
+      id: 2
+      mgmt_ip: 172.28.138.47/20
+
+l3leaf:
+  defaults:
+    platform: default
+    loopback_ipv4_pool: 100.64.200.0/24
+    loopback_ipv4_offset: 2
+    uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet16/1', 'Ethernet17/1']
+    uplink_switches: ['btd555', 'btd556', 'btd556', 'btd556']
+    uplink_ipv4_pool: 100.64.102.0/24
+    spanning_tree_mode: mstp
+    spanning_tree_priority: 16384
+    mlag_peer_ipv4_pool: 10.1.5.0/24
+    mlag_peer_l3_ipv4_pool: 10.2.5.0/24
+    mlag_interfaces: ['Ethernet6/1', 'Ethernet7/1']
+          
+
+
+  node_groups:
+    - group: storage-leafs
+      bgp_as: 65001
+      nodes:
+        - name: btd558
+          id: 1
+          mgmt_ip: 172.28.138.14/20
+          #uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet17/1', 'Ethernet16/1']
+          uplink_switch_interfaces: ['Ethernet15/1', 'Ethernet20/1', 'Ethernet20/5', 'Ethernet21/1']
+        - name: btd453
+          id: 2
+          mgmt_ip: 172.28.137.61/20
+          #uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet17/1', 'Ethernet16/1']
+          uplink_switch_interfaces: ['Ethernet15/5', 'Ethernet21/5', 'Ethernet22/1', 'Ethernet22/5']
+    - group: LEAF11
+      bgp_as: 65001
+      nodes:
+        - name: btd452
+          id: 3
+          mgmt_ip: 172.28.137.60/20
+          uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet16/1', 'Ethernet17/1']
+          uplink_switch_interfaces: ['Ethernet14/1', 'Ethernet17/1', 'Ethernet17/5', 'Ethernet18/1']   
+    - group: leaf21
+      bgp_as: 65001
+      nodes:
+        - name: btp351
+          id: 4
+          mgmt_ip: 172.28.138.18/20
+          #uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet16/1', 'Ethernet17/1']
+          uplink_switch_interfaces: ['Ethernet14/5', 'Ethernet18/5', 'Ethernet19/1', 'Ethernet19/5']
+    
+p2p_uplinks_mtu: 9214
+
+node_type_keys:
+  - key: spine
+    type: spine
+    default_evpn_role: none
+  - key: l3leaf
+    type: l3leaf
+    default_evpn_role: none
+    connected_endpoints: true
+    mlag_support: true
+    network_services:
+      l2: true
+      l3: true

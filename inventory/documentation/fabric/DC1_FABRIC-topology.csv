@@ -1,0 +1,26 @@
+Node Type,Node,Node Interface,Peer Type,Peer,Peer Interface
+l3leaf,cal371,Ethernet1,server,HarnessA,Eth1
+l3leaf,cal371,Ethernet49/1,spine,hs426,Ethernet49/1
+l3leaf,cal371,Ethernet50/1,spine,hs427,Ethernet49/1
+l3leaf,cal372,Ethernet1,server,HarnessA,Eth2
+l3leaf,cal372,Ethernet49/1,spine,hs426,Ethernet50/1
+l3leaf,cal372,Ethernet50/1,spine,hs427,Ethernet50/1
+l3leaf,cal375,Ethernet1,server,HarnessC,Eth5
+l3leaf,cal375,Ethernet49/1,spine,hs426,Ethernet53/1
+l3leaf,cal375,Ethernet50/1,spine,hs427,Ethernet53/1
+spine,hs426,Ethernet49/1,l3leaf,cal371,Ethernet49/1
+spine,hs426,Ethernet50/1,l3leaf,cal372,Ethernet49/1
+spine,hs426,Ethernet51/1,l3leaf,hs429,Ethernet49/1
+spine,hs426,Ethernet52/1,l3leaf,hs523,Ethernet49/1
+spine,hs426,Ethernet53/1,l3leaf,cal375,Ethernet49/1
+spine,hs427,Ethernet49/1,l3leaf,cal371,Ethernet50/1
+spine,hs427,Ethernet50/1,l3leaf,cal372,Ethernet50/1
+spine,hs427,Ethernet51/1,l3leaf,hs429,Ethernet50/1
+spine,hs427,Ethernet52/1,l3leaf,hs523,Ethernet50/1
+spine,hs427,Ethernet53/1,l3leaf,cal375,Ethernet50/1
+l3leaf,hs429,Ethernet1,server,HarnessB,Eth3
+l3leaf,hs429,Ethernet49/1,spine,hs426,Ethernet51/1
+l3leaf,hs429,Ethernet50/1,spine,hs427,Ethernet51/1
+l3leaf,hs523,Ethernet1,server,HarnessB,Eth4
+l3leaf,hs523,Ethernet49/1,spine,hs426,Ethernet52/1
+l3leaf,hs523,Ethernet50/1,spine,hs427,Ethernet52/1

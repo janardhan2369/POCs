@@ -1,0 +1,65 @@
+# DCI  Configuration
+stdpoc_custom_ethernet_interfaces:
+  Ethernet48:
+    eos_cli: |
+       !! macsec-physical-connection
+       description kn254-et48
+       mtu 9000
+       switchport access vlan 4046
+       spanning-tree portfast
+       spanning-tree bpdufilter enable
+  Ethernet54/1:
+    eos_cli: |
+       no switchport
+  Ethernet54/1.1:
+    type: l3dot1q
+    ip_address: 161.6.0.1/31
+    eos_cli: |
+              mac security profile dci
+              mac security proxy patch Ethernet54/1.2 external Ethernet48
+  Ethernet54/1.2:
+    type: l3dot1q
+    eos_cli: |
+       no shutdown
+       description macsec-patch-interface
+       vlan id 4046
+#  Ethernet54/1:
+#    eos_cli: |
+#       description macsec-dedicated-interface-DO-NOT-CONNECT
+#       mtu 9000
+#       no switchport     
+##  Ethernet54/1.1:
+#    eos_cli: |
+#       description macsec-proxy-interface
+#       ip address 161.6.0.1/31
+#       mac security profile dci
+#       mac security proxy patch Ethernet54/1.2 external Ethernet48
+#  Ethernet54/1.2:
+#    eos_cli: |
+#       description macsec-patch-interface
+#       vlan id 4046
+
+stdpoc_custom_router_bgp:
+    neighbors:
+      150.5.0.1: 
+        peer_group: EVPN-OVERLAY-PEERS
+      150.5.0.2: 
+        peer_group: EVPN-OVERLAY-PEERS
+      161.6.0.0:
+        peer_group: IPv4-UNDERLAY-PEERS
+    address_family_ipv4:
+      networks:
+        8.8.8.2/32:
+        150.6.0.2/32:
+        161.6.0.0/31:
+      peer_groups:
+        IPv4-UNDERLAY-PEERS:
+          activate:true
+
+stdpoc_custom_mac_security:
+    profiles:
+      dci:
+         cipher: aes256-gcm-xpn
+         connection_keys:
+            abcd:
+               encrypted_key: 11081B06      

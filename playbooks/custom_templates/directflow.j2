@@ -1,0 +1,9 @@
+{% if directflow is arista.avd.defined %}
+!
+directflow
+{%     if directflow.enable is arista.avd.defined(true) %}
+   no shutdown
+{%     elif directflow.enable is arista.avd.defined(false) %}
+   shutdown
+{%     endif %}
+{% endif %}

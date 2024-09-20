@@ -1,0 +1,40 @@
+---
+- name: Playbook to clean up after a POC.
+  hosts: cv_server
+  connection: local
+  gather_facts: no
+  vars:
+    # Container definition
+    containers_provision:
+        DC2_FABRIC:
+          parentContainerName: Tenant
+        DC2_L3LEAFS:
+          parentContainerName: DC2_FABRIC
+        DC2_SPINES:
+          parentContainerName: DC2_FABRIC
+        DC2_LEAF1:
+          parentContainerName: DC2_L3LEAFS
+        DC2_LEAF2:
+          parentContainerName: DC2_L3LEAFS
+        DC2_LEAF3:
+          parentContainerName: DC2_L3LEAFS
+#    configlet_names:
+#        DC1-AVD_cal371: " "
+#        DC1-AVD_cal372: " "
+#        DC1-AVD_cal375: " "
+#        DC1-AVD_hs426: " "
+#        DC1-AVD_hs427: " "
+#        DC1-AVD_hs429: " "
+#        DC1-AVD_hs523: " "
+
+
+  tasks:
+    - name: "Remove Container topology on {{inventory_hostname}}"
+      arista.cvp.cv_container_v3:
+        topology: '{{containers_provision}}'
+        state: absent
+
+#    - name: "Remove Configlets on {{inventory_hostname}}"
+#      arista.cvp.cv_configlet_v3:
+#        configlets: "{{configlet_names}}"
+#        state: absent

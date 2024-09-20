@@ -1,0 +1,62 @@
+---
+- name: Playbook to remove containers from CVP
+  hosts: cv_server
+  connection: local
+  gather_facts: no
+  ignore_errors: yes
+  vars:
+    # Container definition
+    containers_provision:
+        StdPOC_2:
+          parentContainerName: Tenant
+        DC_L3LEAFS:
+          parentContainerName: StdPOC_2
+        DC_SPINES:
+          parentContainerName: StdPOC_2
+        DCI:
+          parentContainerName: StdPOC_2
+        DC1_SPINE:
+          parentContainerName: DC_SPINES
+        DC1_LEAF1:
+          parentContainerName: DC_L3LEAFS
+        DC1_LEAF2:
+          parentContainerName: DC_L3LEAFS
+        DC1_LEAF3:
+          parentContainerName: DC_L3LEAFS
+        DC1_DCI:
+          parentContainerName: DCI
+        DC2_DCI:
+          parentContainerName: DCI
+
+  tasks:
+    - name: "Create Containers topology on {{inventory_hostname}}"
+      arista.cvp.cv_container_v3:
+        topology: '{{containers_provision}}'
+        state: absent
+
+- name: Playbook to remove configlets
+  hosts: cv_server
+  connection: local
+  gather_facts: no
+  vars:
+    configlet_names:
+      StdPOC_2_AVD_gts478: " "
+      StdPOC_2_AVD_gts479: " "
+      StdPOC_2_AVD_gts480: " "
+      StdPOC_2_AVD_gts481: " "
+      StdPOC_2_AVD_hs447: " "
+      StdPOC_2_AVD_hs448: " "
+      StdPOC_2_AVD_kn254: " "
+      StdPOC_2_AVD_kn255: " "
+      StdPOC_2_AVD_kn261: " "
+      StdPOC_2_AVD_kn271: " "
+      StdPOC_2_AVD_ph155: " "
+      StdPOC_2_AVD_ph156: " "
+      StdPOC_2_AVD_tg257: " "
+      StdPOC_2_AVD_tg294: " "
+
+  tasks:
+    - name: "Remove Configlets from {{inventory_hostname}}"
+      arista.cvp.cv_configlet_v3:
+        configlets: "{{configlet_names}}"
+        state: absent

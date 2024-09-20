@@ -1,0 +1,7 @@
+{% if mac_flush_disabled is arista.avd.defined %}
+!
+{%     if mac_flush_disabled.enable is arista.avd.defined(true) %}
+mac address-table flushing interface vlan aggregation disabled
+!
+{%     endif %}
+{% endif %}

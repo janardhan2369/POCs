@@ -1,0 +1,5 @@
+router bgp 63312
+  vrf vrf-1
+     default-route export evpn always
+  vrf vrf-2
+     default-route export evpn always

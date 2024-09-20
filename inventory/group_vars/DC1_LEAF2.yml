@@ -1,0 +1,10 @@
+---
+# Enable Speed-groups to interface with the Spine at 10G
+hardware:
+  speed_groups:
+    - speed_group: 1
+      serdes: 10g
+    - speed_group: 2
+      serdes: 10g
+    - speed_group: 3
+      serdes: 10g

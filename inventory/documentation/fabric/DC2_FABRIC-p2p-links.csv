@@ -1,0 +1,15 @@
+Type, Node,Node Interface,Leaf IP Address,Peer Type,Peer Node,Peer Interface,Peer IP Address
+l3leaf,cal371-dc2,Ethernet49/1,172.32.255.1/31,spine,hs426-dc2,Ethernet49/1,172.32.255.0/31
+l3leaf,cal371-dc2,Ethernet50/1,172.32.255.3/31,spine,hs427-dc2,Ethernet49/1,172.32.255.2/31
+l3leaf,cal372-dc2,Ethernet49/1,172.32.255.5/31,spine,hs426-dc2,Ethernet50/1,172.32.255.4/31
+l3leaf,cal372-dc2,Ethernet50/1,172.32.255.7/31,spine,hs427-dc2,Ethernet50/1,172.32.255.6/31
+l3leaf,cal375-dc2,Ethernet49/1,172.32.255.17/31,spine,hs426-dc2,Ethernet53/1,172.32.255.16/31
+l3leaf,cal375-dc2,Ethernet50/1,172.32.255.19/31,spine,hs427-dc2,Ethernet53/1,172.32.255.18/31
+GWleaf,GWleaf1-dc2,Ethernet49/1,172.32.250.21/31,spine,hs426-dc2,Ethernet54/1,172.32.250.20/31
+GWleaf,GWleaf1-dc2,Ethernet50/1,172.32.250.23/31,spine,hs427-dc2,Ethernet54/1,172.32.250.22/31
+GWleaf,GWleaf2-dc2,Ethernet49/1,172.32.250.25/31,spine,hs426-dc2,Ethernet55/1,172.32.250.24/31
+GWleaf,GWleaf2-dc2,Ethernet50/1,172.32.250.27/31,spine,hs427-dc2,Ethernet55/1,172.32.250.26/31
+spine,hs426-dc2,Ethernet51/1,172.32.255.8/31,l3leaf,hs429-dc2,Ethernet49/1,172.32.255.9/31
+spine,hs426-dc2,Ethernet52/1,172.32.255.12/31,l3leaf,hs523-dc2,Ethernet49/1,172.32.255.13/31
+spine,hs427-dc2,Ethernet51/1,172.32.255.10/31,l3leaf,hs429-dc2,Ethernet50/1,172.32.255.11/31
+spine,hs427-dc2,Ethernet52/1,172.32.255.14/31,l3leaf,hs523-dc2,Ethernet50/1,172.32.255.15/31

@@ -1,0 +1,29 @@
+---
+- name: Playbook to test creating containers.
+  hosts: cv_server
+  connection: local
+  gather_facts: no
+  vars:
+    # Container definition
+    containers_provision:
+        DC2_FABRIC:
+          parentContainerName: Tenant
+        DC2_L3LEAFS:
+          parentContainerName: DC2_FABRIC
+        DC2_SPINES:
+          parentContainerName: DC2_FABRIC
+        DC2_LEAF1:
+          parentContainerName: DC2_L3LEAFS
+        DC2_LEAF2:
+          parentContainerName: DC2_L3LEAFS
+        DC2_LEAF3:
+          parentContainerName: DC2_L3LEAFS
+        DC2_GWLEAFS:
+          parentContainerName: DC2_FABRIC  
+
+  tasks:
+    - name: "Create Containers topology on {{inventory_hostname}}"
+      arista.cvp.cv_container_v3:
+        topology: '{{containers_provision}}'
+        state: present
+

@@ -1,0 +1,8 @@
+---
+svis:
+          10:
+            name: vlan_10
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.10.1/26
+            

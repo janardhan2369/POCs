@@ -1,0 +1,5 @@
+vlan_interfaces:
+   - name: 30
+     pim:
+       ipv4:
+         sparse_mode: true

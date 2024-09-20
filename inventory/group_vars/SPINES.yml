@@ -1,0 +1,37 @@
+---
+type: spine
+
+# Adding prompt configuration
+#prompt: \%H.\%D{\%H:\%M:\%S}\%P
+
+#NTP Configuration
+ntp:
+  servers:
+  - name: 172.22.60.22
+    preferred: true
+    vrf: MGMT
+
+#Logging
+# DC_SPINES.yml receives this logging config in addition to DC.yml becuase we want to use Management0 on the modular platforms we are using as spines.
+logging:
+  format:
+    timestamp: traditional
+    sequence_numbers: true
+  vrfs:
+    MGMT:
+  console: debugging
+
+# Maintenance Mode Configuration
+maintenance:
+  interface_profiles:
+    1Mbps:
+      rate_monitoring:
+        load_interval: 5
+        threshold: 1000
+  unit_profiles:
+    OnBoot_360seconds:
+      on_boot:
+        duration: 360
+  default_interface_profile: 1Mbps
+  default_unit_profile: OnBoot_360seconds
+

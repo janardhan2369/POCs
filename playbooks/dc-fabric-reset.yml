@@ -1,0 +1,37 @@
+---
+- hosts: cv_server
+  any_errors_fatal: yes
+  vars_prompt:
+
+    name: "confirmation"
+    prompt: "Are you sure you want to run this playbook? This will delete all configurations and restore the topology to ZTP mode. Answer with 'YES'"
+    default: "NO"
+    private: no
+
+  tasks:
+    - name: Check Confirmation
+      fail: msg="Playbook run confirmation failed"
+      when: confirmation != "YES"
+
+- name: Restore Devices in CVP to default configuration
+  hosts: cv_server
+  connection: local
+  collections:
+    - arista.avd
+    - arista.cvp
+  tasks:
+    - name: run CVP provisioning
+      import_role:
+        name: eos_config_deploy_cvp
+      vars:
+        container_root: 'Fabric-AVD'
+        configlets_prefix: 'Fabric_AVD'
+        cv_collection: v1
+        device_filter:
+          - 'dc1-spine1a-wps323'
+          - 'dc1-leaf1a-cal418'
+          - 'dc1-leaf1b-cal419'
+          - 'dc1-leaf2a-cal421'
+          - 'dc1-leaf2b-cal422'
+          - 'dc1-leaf3a-up686'
+        state: absent

@@ -1,0 +1,22 @@
+{% if oism is arista.avd.defined %}
+!
+{%     if oism.enable is arista.avd.defined(true) %}
+interface Vxlan1
+  vxlan vrf tenant multicast group 225.0.0.100
+!
+router bgp {{ switch.bgp_as }}
+  vrf tenant
+    evpn multicast
+!
+router multicast
+  ipv4
+    routing
+    software-forwarding sfe
+!
+interface Vlan{{ oism.vlans }}
+  ip igmp
+  multicast ipv4 static
+  pim ipv4 local-interface Loopback102
+!
+{%     endif %}
+{% endif %}

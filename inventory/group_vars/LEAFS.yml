@@ -1,0 +1,24 @@
+---
+# Enable multicast
+router_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
+  vrfs:
+    - name: alpha
+      ipv4:
+         routing: true
+    - name: beta
+      ipv4:
+         routing: true
+
+router_pim_sparse_mode:
+  ipv4:
+    bfd: true
+  vrfs:
+    - name: alpha
+      ipv4:
+         bfd: true
+    - name: beta
+      ipv4:
+         bfd: true

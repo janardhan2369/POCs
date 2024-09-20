@@ -1,0 +1,85 @@
+---
+all:
+  children:
+    CVP:
+      hosts:
+        cv_ztp:
+          #poc-cva-17-cvp
+          ansible_host: 172.28.134.30
+          ansible_user: root
+          ansible_password: eossuper
+        cv_server:
+          #poc-cva-23-cvp
+          #ansible_httpapi_host: 172.28.134.30
+          #ansible_host: 172.28.134.30
+          #poc-cvp-23
+          ansible_httpapi_host: 172.28.134.30
+          ansible_host: 172.28.134.30
+          ansible_user: cvpadmin
+          ansible_password: eossuper
+          ansible_connection: httpapi
+          ansible_httpapi_use_ssl: true
+          ansible_httpapi_validate_certs: false
+          ansible_network_os: eos
+          ansible_httpapi_port: 443
+          # Configuration to get Virtual Env information
+          ansible_python_interpreter: $(which python3)
+    # DC_Fabric - EVPN Fabric
+    Fabric-AVD:
+      children:
+        Fabric-AVD:
+          children:
+            SPINES:
+              vars:
+                type: spine
+              children:
+                 SPINE1:  
+                   hosts:
+                    btd555:
+                      ansible_host: 172.28.138.46
+                 SPINE2:  
+                   hosts:
+                    btd556:
+                      ansible_host: 172.28.138.47
+
+            LEAFS:
+              vars:
+                type: l3leaf
+              children:
+                 LEAF11:
+                   hosts:
+                     btd452:
+                       ansible_host: 172.28.137.60 
+                 LEAF21:
+                   hosts:
+                     btp351:
+                       ansible_host: 172.28.138.18
+                 LEAF31:
+                   hosts:
+                     btd558:
+                       ansible_host: 172.28.138.14 
+                 LEAF32:
+                   hosts:
+                     btd453:
+                       ansible_host: 172.28.137.61
+          vars:
+            ansible_connection: httpapi
+            ansible_network_os: eos
+            ansible_user: cvpadmin
+            # should use vault for passwords
+            ansible_ssh_pass: eossuper
+            ansible_become: true
+            ansible_become_method: enable
+            ansible_httpapi_use_ssl: true
+            ansible_httpapi_validate_certs: false
+        DC_VLANS:
+          children:
+             LEAFS:
+        DC_SERVERS:
+          children:
+             LEAFS:
+            
+    DC_ENDPOINTS:
+      children:
+        LEAFS:
+        

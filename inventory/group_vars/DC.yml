@@ -1,0 +1,182 @@
+
+---
+# Validation lab
+#Path to custom templates under playbooks/
+custom_templates: 
+  - custom_templates/mss-fw.j2
+  - custom_templates/custom-tcam-profile.j2
+  - custom_templates/oism.j2
+  - custom_templates/mac-flush-disabled.j2
+
+# Design variables
+#design:
+#  type: "l3ls"
+
+# Sets the base vlan for vrf peering over mlag (base_vlan + vrf_id)
+mlag_ibgp_peering_vrfs:
+  base_vlan: 4050
+
+# local users
+local_users:
+  admin:
+    privilege: 15
+    role: network-admin
+    no_password: true
+
+  cvpadmin:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$MUlXuH7QQNH4qejR$m2d./2h0PQd/Ls3V8IwSouMMIxrDMl7cobLtjKpXpAUU7f53RXp92RhKbQ.2fb7wm.TeYFO7f7D4kKmGwWKuC0"
+
+  arista:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$fTv/8ehbz7BW408.$5uaZiXapZq7WazT6BrfDktsjLFM6MIpbnpZp62wEaCLZ6ILbw2WuQ2Z2THkiDQk.IXv2RpUZ13zbHfApT/EO81"
+
+# Root Password
+aaa_root:
+  secret:
+    sha512_password: "$6$MUlXuH7QQNH4qejR$m2d./2h0PQd/Ls3V8IwSouMMIxrDMl7cobLtjKpXpAUU7f53RXp92RhKbQ.2fb7wm.TeYFO7f7D4kKmGwWKuC0"
+
+# AAA Authorization Settings
+aaa_authorization:
+  exec:
+    default: local
+
+# AAA Authentication Settings
+aaa_authentication:
+  policies:
+    local:
+      allow_nopassword: true
+
+# Aliases
+aliases: | 
+  alias cc clear counters
+  alias senz show interface counter error | nz
+  alias snz show interface counter | nz
+  alias sqnz show interface counter queue | nz
+  alias srnz show interface counter rate | nz
+
+# Banner
+banners:
+  login: |
+    ---------------------------------------------------------
+    --                                                     --
+    --      Topology  TWO-SIGMA Ansible AVD Testing        --
+    --         please contact arunima@,janardhan@          --
+    --                                                     --
+    ---------------------------------------------------------
+    EOF
+
+# Prompt
+prompt: !unsafe "%H.%D{%H:%M:%S}%P"
+
+# Set Timezone
+clock:
+  timezone: US/Pacific
+
+# Enable Event-Monitor
+event_monitor:
+  enabled: true
+
+# Configure Load-Interval
+load_interval:
+  default: 2
+
+terminal:
+  length: 1000
+
+# Internal vlan allocation order and range | Required
+internal_vlan_order:
+  allocation: ascending
+  range:
+    beginning: 4010
+    ending: 4090
+
+#sflow:
+#  sample: 5000
+#  destinations: 
+#    127.0.0.1:
+#  source_interface: Loopback0
+#  run: true
+
+# Cloud Vision server information
+#poc-cva-17-cvp
+cvp_instance_ips: 
+   - 172.28.134.30
+#cvp_ingestauth_key: eossuper
+#cvp_token_file: default
+
+# OOB Management network default gateway.
+mgmt_interface: Management1
+mgmt_interface_vrf: MGMT
+mgmt_gateway: 172.28.128.1
+
+# OOB mgmt interface destination network - overide default route
+mgmt_destination_networks:
+  - 10.80.0.0/12
+  - 172.16.0.0/12
+  - 10.239.0.0/16
+  - 10.240.0.0/13
+
+# dns servers.
+name_servers:
+  - 172.22.60.20
+dns_domain: sjc.aristanetworks.com
+
+# NTP Servers IP or DNS name, first NTP server will be prefered, and sourced from Managment VRF
+ntp:
+  local_interface:
+    name: Management1
+    vrf: MGMT
+  servers:
+  - name: 172.22.60.22
+    preferred: true
+    vrf: MGMT
+
+#Logging
+logging:
+  format:
+    timestamp: traditional
+    sequence_numbers: true
+  vrfs:
+    MGMT:
+      source_interface: Management1
+#      hosts:
+#        poc-std2-services.sjc.aristanetworks.com:
+  console: debugging
+
+# LANZ
+#queue_monitor_length:
+#  enabled: true
+#  log: 5
+#  notifying: true
+#queue_monitor_streaming:
+#  enable: true
+
+# IPv6 Routing
+#ipv6_unicast_routing: true
+
+# Mac address aging timer (EOS Default: 300)
+mac_address_table:
+  aging_time: 21600
+
+# enable eAPI
+management_eapi:
+  enable_https: true
+  enable_http: true
+
+# Set all ports to routed by default to avoid L2 issues
+#switchport_default:
+#  mode: routed
+  
+# Platform specific settings
+platform_settings:
+  - platforms: [ default ]
+    reload_delay:
+      mlag: 300
+      non_mlag: 330
+  - platforms: [ 7050SX3 ]
+    reload_delay:
+      mlag: 660
+      non_mlag: 600

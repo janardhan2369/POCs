@@ -1,0 +1,12 @@
+---
+tenants:
+  - name: test
+    vrfs:
+      - name: default
+        svis:
+          - id: 30
+            name: vlan_30
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.30.2/26
+            ip_virtual_router_addresses: 100.0.30.1/26

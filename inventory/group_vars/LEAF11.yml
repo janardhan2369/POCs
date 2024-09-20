@@ -1,0 +1,82 @@
+---
+tenants:
+  - name: test
+    vrfs:
+      - name: default
+        svis:
+          - id: 10
+            name: vlan_10
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.10.1/26
+            profile: enable_pim
+
+          - id: 11
+            name: vlan_11
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.11.1/26
+            profile: enable_pim
+
+          - id: 12
+            name: vlan_12
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.12.1/26
+            profile: enable_pim
+
+          - id: 13
+            name: vlan_13
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.13.1/26
+            profile: enable_pim
+
+          - id: 14
+            name: vlan_14
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.14.1/26
+            profile: enable_pim
+
+          - id: 15
+            name: vlan_15
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.15.1/26
+            profile: enable_pim
+
+
+          - id: 16
+            name: vlan_16
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.16.1/26
+            profile: enable_pim
+
+          - id: 17
+            name: vlan_17
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.17.1/26
+            profile: enable_pim
+
+          - id: 18
+            name: vlan_18
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.18.1/26
+            profile: enable_pim
+
+          - id: 19
+            name: vlan_19
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.19.1/26
+            profile: enable_pim           
+svi_profiles:
+  - profile: enable_pim
+    structured_config:
+      pim:
+       ipv4:
+         sparse_mode: true         

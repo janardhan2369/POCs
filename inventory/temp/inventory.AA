@@ -1,0 +1,90 @@
+---
+# EVPN A-A
+all:
+  children:
+    CVP:
+      hosts:
+        cv_ztp:
+          ansible_host: 172.28.136.142
+          ansible_user: root
+          ansible_password: eossuper
+        cv_server:
+          ansible_httpapi_host: 172.28.136.142
+          ansible_host: 172.28.136.142
+          ansible_user: cvpadmin
+          ansible_password: eossuper
+          ansible_connection: httpapi
+          ansible_httpapi_use_ssl: true
+          ansible_httpapi_validate_certs: false
+          ansible_network_os: eos
+          ansible_httpapi_port: 443
+          # Configuration to get Virtual Env information
+          ansible_python_interpreter: $(which python3)
+    # DC_Fabric - EVPN Fabric
+    DC:
+      children:
+        DC_FABRIC:
+          children:
+            DC_SPINES:
+              vars:
+                type: spine
+              children:
+                 DC1_SPINE:  
+                   hosts:
+                     hs426:
+                       ansible_host: 172.28.132.89
+                   hs427:
+                       ansible_host: 172.28.132.94
+            DC_L3LEAFS:
+              vars:
+                type: l3leaf
+              children:
+                DC1_LEAF1:
+                  hosts:
+                    cal371:
+                      ansible_host: 172.28.133.78
+                    cal372:
+                      ansible_host: 172.28.131.179
+                DC1_LEAF2:
+                  hosts:
+                    hs429:
+                      ansible_host: 172.28.132.96
+                    hs523:
+                      ansible_host: 172.28.131.47
+                DC1_LEAF3:
+                  hosts:
+                    cal375:
+                      ansible_host: 172.28.133.81      
+            DC_GWLEAFS:
+              vars:
+                type: GWleaf
+              children:
+                DC1_GWleaf:
+                  hosts:
+                    hs425:
+                      ansible_host: 172.28.132.88
+                    hs430:
+                      ansible_host: 172.28.132.97
+                 DC2_GWleaf:
+                   hosts:
+                     GWleaf1-dc2:
+                       ansible_host: 172.28.143.88
+                     GWleaf2-dc2:
+                       ansible_host: 172.28.143.97
+          vars:
+            ansible_connection: httpapi
+            ansible_network_os: eos
+            ansible_user: cvpadmin
+            # should use vault for passwords
+            ansible_ssh_pass: eossuper
+            ansible_become: true
+            ansible_become_method: enable
+            ansible_httpapi_use_ssl: true
+            ansible_httpapi_validate_certs: false
+        DC1_TENANTS_NETWORKS:
+          children:
+            DC_L3LEAFS:
+            DC_GWLEAFS:
+        DC1_SERVERS:
+          children:
+            DC_L3LEAFS:        
