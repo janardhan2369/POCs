@@ -20,7 +20,7 @@ router_bgp:
     maximum_routes: 12000
     send_community: all
     route_map_in: RM-MLAG-PEER-IN
-  - name: IPv4-UNDERLAY-PEERS
+  - name: LEAF-SPINE
     type: ipv4
     maximum_routes: 12000
     send_community: all
@@ -28,7 +28,7 @@ router_bgp:
     peer_groups:
     - name: MLAG-IPv4-UNDERLAY-PEER
       activate: true
-    - name: IPv4-UNDERLAY-PEERS
+    - name: LEAF-SPINE
       activate: true
   neighbors:
   - ip_address: 10.2.5.0
@@ -36,58 +36,100 @@ router_bgp:
     peer: btd558
     description: btd558
   - ip_address: 100.64.102.8
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd555
-    description: btd555_Ethernet15/5
+    description: btd555_Ethernet4/1
   - ip_address: 100.64.102.10
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd556
-    description: btd556_Ethernet21/5
+    description: btd556_Ethernet10/1
   - ip_address: 100.64.102.12
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd556
-    description: btd556_Ethernet22/1
+    description: btd556_Ethernet11/1
   - ip_address: 100.64.102.14
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd556
-    description: btd556_Ethernet22/5
+    description: btd556_Ethernet12/1
   redistribute_routes:
   - source_protocol: connected
     route_map: RM-CONN-2-BGP
+static_routes:
+- vrf: default
+  destination_address_prefix: 10.80.0.0/12
+  gateway: 172.28.128.1
+- vrf: default
+  destination_address_prefix: 172.16.0.0/12
+  gateway: 172.28.128.1
+- vrf: default
+  destination_address_prefix: 10.239.0.0/16
+  gateway: 172.28.128.1
+- vrf: default
+  destination_address_prefix: 10.240.0.0/13
+  gateway: 172.28.128.1
 service_routing_protocols_model: multi-agent
 ip_routing: true
 router_multicast:
   ipv4:
     routing: true
+daemon_terminattr:
+  cvaddrs:
+  - 172.28.134.30:9910
+  cvauth:
+    method: token
+    token_file: /tmp/token
+  cvvrf: default
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: false
 vlan_internal_order:
   allocation: ascending
   range:
-    beginning: 1006
-    ending: 1199
+    beginning: 4010
+    ending: 4090
+ip_name_servers:
+- ip_address: 172.22.60.20
+  vrf: default
 spanning_tree:
   mode: mstp
   mst_instances:
   - id: '0'
     priority: 16384
   no_spanning_tree_vlan: 4093-4094
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  no_password: true
+- name: arista
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$fTv/8ehbz7BW408.$5uaZiXapZq7WazT6BrfDktsjLFM6MIpbnpZp62wEaCLZ6ILbw2WuQ2Z2THkiDQk.IXv2RpUZ13zbHfApT/EO81
+- name: cvpadmin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$MUlXuH7QQNH4qejR$m2d./2h0PQd/Ls3V8IwSouMMIxrDMl7cobLtjKpXpAUU7f53RXp92RhKbQ.2fb7wm.TeYFO7f7D4kKmGwWKuC0
 vrfs:
-- name: MGMT
+- name: default
   ip_routing: false
 management_interfaces:
 - name: Management1
   description: oob_management
   shutdown: false
-  vrf: MGMT
+  vrf: default
   ip_address: 172.28.137.61/20
-  gateway: null
+  gateway: 172.28.128.1
   type: oob
+mac_address_table:
+  aging_time: 21600
 management_api_http:
   enable_vrfs:
-  - name: MGMT
+  - name: default
+  enable_http: true
   enable_https: true
 vlans:
 - id: 4093
@@ -100,6 +142,36 @@ vlans:
   name: MLAG_PEER
   trunk_groups:
   - MLAG
+- id: 30
+  name: vlan_30
+  tenant: test
+- id: 31
+  name: vlan_31
+  tenant: test
+- id: 32
+  name: vlan_32
+  tenant: test
+- id: 33
+  name: vlan_33
+  tenant: test
+- id: 34
+  name: vlan_34
+  tenant: test
+- id: 35
+  name: vlan_35
+  tenant: test
+- id: 36
+  name: vlan_36
+  tenant: test
+- id: 37
+  name: vlan_37
+  tenant: test
+- id: 38
+  name: vlan_38
+  tenant: test
+- id: 39
+  name: vlan_39
+  tenant: test
 vlan_interfaces:
 - name: Vlan4093
   description: MLAG_PEER_L3_PEERING
@@ -115,6 +187,116 @@ vlan_interfaces:
   no_autostate: true
   mtu: 9214
   ip_address: 10.1.5.1/31
+- name: Vlan30
+  tenant: test
+  description: vlan_30
+  shutdown: false
+  ip_address: 100.0.30.3/26
+  mtu: 9000
+  ip_virtual_router_addresses:
+  - 100.0.30.1
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan31
+  tenant: test
+  description: vlan_31
+  shutdown: false
+  ip_address: 100.0.31.3/26
+  mtu: 9000
+  ip_virtual_router_addresses:
+  - 100.0.31.1
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan32
+  tenant: test
+  description: vlan_32
+  shutdown: false
+  ip_address: 100.0.32.3/26
+  mtu: 9000
+  ip_virtual_router_addresses:
+  - 100.0.32.1
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan33
+  tenant: test
+  description: vlan_33
+  shutdown: false
+  ip_address: 100.0.33.3/26
+  mtu: 9000
+  ip_virtual_router_addresses:
+  - 100.0.33.1
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan34
+  tenant: test
+  description: vlan_34
+  shutdown: false
+  ip_address: 100.0.34.3/26
+  mtu: 9000
+  ip_virtual_router_addresses:
+  - 100.0.34.1
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan35
+  tenant: test
+  description: vlan_35
+  shutdown: false
+  ip_address: 100.0.35.3/26
+  mtu: 9000
+  ip_virtual_router_addresses:
+  - 100.0.35.1
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan36
+  tenant: test
+  description: vlan_36
+  shutdown: false
+  ip_address: 100.0.36.3/26
+  mtu: 9000
+  ip_virtual_router_addresses:
+  - 100.0.36.1
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan37
+  tenant: test
+  description: vlan_37
+  shutdown: false
+  ip_address: 100.0.37.3/26
+  mtu: 9000
+  ip_virtual_router_addresses:
+  - 100.0.37.1
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan38
+  tenant: test
+  description: vlan_38
+  shutdown: false
+  ip_address: 100.0.38.3/26
+  mtu: 9000
+  ip_virtual_router_addresses:
+  - 100.0.38.1
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan39
+  tenant: test
+  description: vlan_39
+  shutdown: false
+  ip_address: 100.0.39.3/26
+  mtu: 9000
+  ip_virtual_router_addresses:
+  - 100.0.39.1
+  pim:
+    ipv4:
+      sparse_mode: true
 port_channel_interfaces:
 - name: Port-Channel61
   description: MLAG_PEER_btd558_Po61
@@ -124,32 +306,41 @@ port_channel_interfaces:
   trunk_groups:
   - LEAF_PEER_L3
   - MLAG
+- name: Port-Channel51
+  description: dc1-Storage-Po100_PO100
+  type: switched
+  shutdown: false
+  mode: trunk
+  vlans: 30-39
+  mlag: 51
 ethernet_interfaces:
 - name: Ethernet6/1
   peer: btd558
   peer_interface: Ethernet6/1
   peer_type: mlag_peer
-  description: MLAG_PEER_btd558_Ethernet6/1
+  description: connected to ixia
   type: port-channel-member
   shutdown: false
   channel_group:
     id: 61
     mode: active
+  speed: forced 100gfull
 - name: Ethernet7/1
   peer: btd558
   peer_interface: Ethernet7/1
   peer_type: mlag_peer
-  description: MLAG_PEER_btd558_Ethernet7/1
+  description: connected to ixia
   type: port-channel-member
   shutdown: false
   channel_group:
     id: 61
     mode: active
-- name: Ethernet14/1
+  speed: forced 100gfull
+- name: Ethernet1/1
   peer: btd555
-  peer_interface: Ethernet15/5
+  peer_interface: Ethernet4/1
   peer_type: spine
-  description: P2P_LINK_TO_BTD555_Ethernet15/5
+  description: P2P_LINK_TO_BTD555_Ethernet4/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -157,11 +348,11 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
-- name: Ethernet15/1
+- name: Ethernet2/1
   peer: btd556
-  peer_interface: Ethernet21/5
+  peer_interface: Ethernet10/1
   peer_type: spine
-  description: P2P_LINK_TO_BTD556_Ethernet21/5
+  description: P2P_LINK_TO_BTD556_Ethernet10/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -169,11 +360,11 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
-- name: Ethernet16/1
+- name: Ethernet3/1
   peer: btd556
-  peer_interface: Ethernet22/1
+  peer_interface: Ethernet11/1
   peer_type: spine
-  description: P2P_LINK_TO_BTD556_Ethernet22/1
+  description: P2P_LINK_TO_BTD556_Ethernet11/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -181,11 +372,11 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
-- name: Ethernet17/1
+- name: Ethernet4/1
   peer: btd556
-  peer_interface: Ethernet22/5
+  peer_interface: Ethernet12/1
   peer_type: spine
-  description: P2P_LINK_TO_BTD556_Ethernet22/5
+  description: P2P_LINK_TO_BTD556_Ethernet12/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -193,6 +384,17 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
+- name: Ethernet5/1
+  peer: dc1-Storage-Po100
+  peer_interface: Eth2/1
+  peer_type: server
+  port_profile: PO100
+  description: dc1-Storage-Po100_Eth2/1
+  shutdown: false
+  type: port-channel-member
+  channel_group:
+    id: 51
+    mode: active
 mlag_configuration:
   domain_id: STORAGE-LEAFs
   local_interface: Vlan4094

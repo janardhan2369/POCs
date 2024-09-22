@@ -12,71 +12,116 @@ router_bgp:
   updates:
     wait_install: true
   peer_groups:
-  - name: IPv4-UNDERLAY-PEERS
+  - name: LEAF-SPINE
     type: ipv4
     maximum_routes: 12000
     send_community: all
+    route_reflector_client: true
+    next_hop_self: true
   address_family_ipv4:
     peer_groups:
-    - name: IPv4-UNDERLAY-PEERS
+    - name: LEAF-SPINE
       activate: true
   redistribute_routes:
   - source_protocol: connected
     route_map: RM-CONN-2-BGP
   neighbors:
   - ip_address: 100.64.102.17
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd452
-    description: btd452_Ethernet14/1
+    description: btd452_Ethernet1/1
   - ip_address: 100.64.102.25
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btp351
-    description: btp351_Ethernet14/1
+    description: btp351_Ethernet1/1
   - ip_address: 100.64.102.1
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd558
-    description: btd558_Ethernet14/1
+    description: btd558_Ethernet1/1
   - ip_address: 100.64.102.9
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd453
-    description: btd453_Ethernet14/1
+    description: btd453_Ethernet1/1
+  bgp_cluster_id: 1.1.1.1
+static_routes:
+- vrf: default
+  destination_address_prefix: 10.80.0.0/12
+  gateway: 172.28.128.1
+- vrf: default
+  destination_address_prefix: 172.16.0.0/12
+  gateway: 172.28.128.1
+- vrf: default
+  destination_address_prefix: 10.239.0.0/16
+  gateway: 172.28.128.1
+- vrf: default
+  destination_address_prefix: 10.240.0.0/13
+  gateway: 172.28.128.1
 service_routing_protocols_model: multi-agent
 ip_routing: true
 router_multicast:
   ipv4:
     routing: true
+daemon_terminattr:
+  cvaddrs:
+  - 172.28.134.30:9910
+  cvauth:
+    method: token
+    token_file: /tmp/token
+  cvvrf: default
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: false
 vlan_internal_order:
   allocation: ascending
   range:
-    beginning: 1006
-    ending: 1199
+    beginning: 4010
+    ending: 4090
+ip_name_servers:
+- ip_address: 172.22.60.20
+  vrf: default
 spanning_tree:
   mode: none
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  no_password: true
+- name: arista
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$fTv/8ehbz7BW408.$5uaZiXapZq7WazT6BrfDktsjLFM6MIpbnpZp62wEaCLZ6ILbw2WuQ2Z2THkiDQk.IXv2RpUZ13zbHfApT/EO81
+- name: cvpadmin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$MUlXuH7QQNH4qejR$m2d./2h0PQd/Ls3V8IwSouMMIxrDMl7cobLtjKpXpAUU7f53RXp92RhKbQ.2fb7wm.TeYFO7f7D4kKmGwWKuC0
 vrfs:
-- name: MGMT
+- name: default
   ip_routing: false
 management_interfaces:
 - name: Management1
   description: oob_management
   shutdown: false
-  vrf: MGMT
+  vrf: default
   ip_address: 172.28.138.46/20
-  gateway: null
+  gateway: 172.28.128.1
   type: oob
+mac_address_table:
+  aging_time: 21600
 management_api_http:
   enable_vrfs:
-  - name: MGMT
+  - name: default
+  enable_http: true
   enable_https: true
 ethernet_interfaces:
-- name: Ethernet14/1
+- name: Ethernet1/1
   peer: btd452
-  peer_interface: Ethernet14/1
+  peer_interface: Ethernet1/1
   peer_type: l3leaf
-  description: P2P_LINK_TO_BTD452_Ethernet14/1
+  description: P2P_LINK_TO_BTD452_Ethernet1/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -84,11 +129,11 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
-- name: Ethernet14/5
+- name: Ethernet2/1
   peer: btp351
-  peer_interface: Ethernet14/1
+  peer_interface: Ethernet1/1
   peer_type: l3leaf
-  description: P2P_LINK_TO_BTP351_Ethernet14/1
+  description: P2P_LINK_TO_BTP351_Ethernet1/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -96,11 +141,11 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
-- name: Ethernet15/1
+- name: Ethernet3/1
   peer: btd558
-  peer_interface: Ethernet14/1
+  peer_interface: Ethernet1/1
   peer_type: l3leaf
-  description: P2P_LINK_TO_BTD558_Ethernet14/1
+  description: P2P_LINK_TO_BTD558_Ethernet1/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -108,11 +153,11 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
-- name: Ethernet15/5
+- name: Ethernet4/1
   peer: btd453
-  peer_interface: Ethernet14/1
+  peer_interface: Ethernet1/1
   peer_type: l3leaf
-  description: P2P_LINK_TO_BTD453_Ethernet14/1
+  description: P2P_LINK_TO_BTD453_Ethernet1/1
   shutdown: false
   mtu: 9214
   type: routed

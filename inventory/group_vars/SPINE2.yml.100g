@@ -1,0 +1,49 @@
+custom_structured_configuration_ethernet_interfaces:
+   - name: Ethernet17/1
+     description: 'connected to spine1'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet17/5
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet18/1
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet18/5
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet19/1
+     description: 'connected to spine1'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet19/5
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet20/1
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet20/5
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet21/1
+     description: 'connected to spine1'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet21/5
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet22/1
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet22/5
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'

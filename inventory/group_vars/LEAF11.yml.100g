@@ -84,4 +84,27 @@ svi_profiles:
 custom_structured_configuration_ethernet_interfaces:
    - name: Ethernet6/1
      description: 'connected to ixia'
+     type: 'switchport'
      speed: 'forced 10000full'
+   - name: Ethernet14/1
+     description: 'connected to spine1'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet15/1
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet16/1
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet17/1
+     description: 'connected to spine2'
+     type: 'routed'
+     speed: 'forced 100gfull'
+
+custom_structured_configuration_router_bgp:
+  router_bgp:
+        redistribute_routes:
+            - source_protocol: connected
+              route_map: test123

@@ -12,74 +12,116 @@ router_bgp:
   updates:
     wait_install: true
   peer_groups:
-  - name: IPv4-UNDERLAY-PEERS
+  - name: LEAF-SPINE
     type: ipv4
     maximum_routes: 12000
     send_community: all
   address_family_ipv4:
     peer_groups:
-    - name: IPv4-UNDERLAY-PEERS
+    - name: LEAF-SPINE
       activate: true
   redistribute_routes:
   - source_protocol: connected
-    route_map: RM-CONN-2-BGP
+    route_map: rm_subnets
   neighbors:
   - ip_address: 100.64.102.24
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd555
-    description: btd555_Ethernet14/5
+    description: btd555_Ethernet2/1
   - ip_address: 100.64.102.26
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd556
-    description: btd556_Ethernet18/5
+    description: btd556_Ethernet4/1
   - ip_address: 100.64.102.28
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd556
-    description: btd556_Ethernet19/1
+    description: btd556_Ethernet5/1
   - ip_address: 100.64.102.30
-    peer_group: IPv4-UNDERLAY-PEERS
+    peer_group: LEAF-SPINE
     remote_as: '65001'
     peer: btd556
-    description: btd556_Ethernet19/5
+    description: btd556_Ethernet6/1
+static_routes:
+- vrf: default
+  destination_address_prefix: 10.80.0.0/12
+  gateway: 172.28.128.1
+- vrf: default
+  destination_address_prefix: 172.16.0.0/12
+  gateway: 172.28.128.1
+- vrf: default
+  destination_address_prefix: 10.239.0.0/16
+  gateway: 172.28.128.1
+- vrf: default
+  destination_address_prefix: 10.240.0.0/13
+  gateway: 172.28.128.1
 service_routing_protocols_model: multi-agent
 ip_routing: true
 router_multicast:
   ipv4:
     routing: true
+daemon_terminattr:
+  cvaddrs:
+  - 172.28.134.30:9910
+  cvauth:
+    method: token
+    token_file: /tmp/token
+  cvvrf: default
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: false
 vlan_internal_order:
   allocation: ascending
   range:
-    beginning: 1006
-    ending: 1199
+    beginning: 4010
+    ending: 4090
+ip_name_servers:
+- ip_address: 172.22.60.20
+  vrf: default
 spanning_tree:
   mode: mstp
   mst_instances:
   - id: '0'
     priority: 16384
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  no_password: true
+- name: arista
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$fTv/8ehbz7BW408.$5uaZiXapZq7WazT6BrfDktsjLFM6MIpbnpZp62wEaCLZ6ILbw2WuQ2Z2THkiDQk.IXv2RpUZ13zbHfApT/EO81
+- name: cvpadmin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$MUlXuH7QQNH4qejR$m2d./2h0PQd/Ls3V8IwSouMMIxrDMl7cobLtjKpXpAUU7f53RXp92RhKbQ.2fb7wm.TeYFO7f7D4kKmGwWKuC0
 vrfs:
-- name: MGMT
+- name: default
   ip_routing: false
 management_interfaces:
 - name: Management1
   description: oob_management
   shutdown: false
-  vrf: MGMT
+  vrf: default
   ip_address: 172.28.138.18/20
-  gateway: null
+  gateway: 172.28.128.1
   type: oob
+mac_address_table:
+  aging_time: 21600
 management_api_http:
   enable_vrfs:
-  - name: MGMT
+  - name: default
+  enable_http: true
   enable_https: true
 ethernet_interfaces:
-- name: Ethernet14/1
+- name: Ethernet1/1
   peer: btd555
-  peer_interface: Ethernet14/5
+  peer_interface: Ethernet2/1
   peer_type: spine
-  description: P2P_LINK_TO_BTD555_Ethernet14/5
+  description: P2P_LINK_TO_BTD555_Ethernet2/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -87,11 +129,11 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
-- name: Ethernet15/1
+- name: Ethernet2/1
   peer: btd556
-  peer_interface: Ethernet18/5
+  peer_interface: Ethernet4/1
   peer_type: spine
-  description: P2P_LINK_TO_BTD556_Ethernet18/5
+  description: P2P_LINK_TO_BTD556_Ethernet4/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -99,11 +141,11 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
-- name: Ethernet16/1
+- name: Ethernet3/1
   peer: btd556
-  peer_interface: Ethernet19/1
+  peer_interface: Ethernet5/1
   peer_type: spine
-  description: P2P_LINK_TO_BTD556_Ethernet19/1
+  description: P2P_LINK_TO_BTD556_Ethernet5/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -111,11 +153,11 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
-- name: Ethernet17/1
+- name: Ethernet4/1
   peer: btd556
-  peer_interface: Ethernet19/5
+  peer_interface: Ethernet6/1
   peer_type: spine
-  description: P2P_LINK_TO_BTD556_Ethernet19/5
+  description: P2P_LINK_TO_BTD556_Ethernet6/1
   shutdown: false
   mtu: 9214
   type: routed
@@ -123,6 +165,17 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
+- name: Ethernet6/1
+  peer: dc1-LEAF21
+  peer_interface: Eth6/1
+  peer_type: server
+  port_profile: VLAN_LEAF21
+  description: connected to ixia
+  shutdown: false
+  type: switched
+  mode: trunk
+  vlans: 20-29
+  speed: forced 10000full
 loopback_interfaces:
 - name: Loopback0
   description: EVPN_Overlay_Peering
@@ -133,6 +186,12 @@ prefix_lists:
   sequence_numbers:
   - sequence: 10
     action: permit 100.64.200.0/24 eq 32
+- name: prefix_subnets
+  sequence_numbers:
+  - sequence: 10
+    action: permit 100.64.200.0/24 eq 32
+  - sequence: 20
+    action: permit 100.0.0.0/8 eq 26
 route_maps:
 - name: RM-CONN-2-BGP
   sequence_numbers:
@@ -140,12 +199,140 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+- name: rm_subnets
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list prefix_subnets
 router_pim_sparse_mode:
   ipv4:
     rp_addresses:
     - address: 2.0.0.1
+vlans:
+- id: 20
+  name: vlan_20
+  tenant: test
+- id: 21
+  name: vlan_21
+  tenant: test
+- id: 22
+  name: vlan_22
+  tenant: test
+- id: 23
+  name: vlan_23
+  tenant: test
+- id: 24
+  name: vlan_24
+  tenant: test
+- id: 25
+  name: vlan_25
+  tenant: test
+- id: 26
+  name: vlan_26
+  tenant: test
+- id: 27
+  name: vlan_27
+  tenant: test
+- id: 28
+  name: vlan_28
+  tenant: test
+- id: 29
+  name: vlan_29
+  tenant: test
 ip_igmp_snooping:
   globally_enabled: true
 ip_virtual_router_mac_address: 00:dc:00:00:00:01
+vlan_interfaces:
+- name: Vlan20
+  tenant: test
+  description: vlan_20
+  shutdown: false
+  ip_address: 100.0.20.1/26
+  mtu: 9000
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan21
+  tenant: test
+  description: vlan_21
+  shutdown: false
+  ip_address: 100.0.21.1/26
+  mtu: 9000
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan22
+  tenant: test
+  description: vlan_22
+  shutdown: false
+  ip_address: 100.0.22.1/26
+  mtu: 9000
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan23
+  tenant: test
+  description: vlan_23
+  shutdown: false
+  ip_address: 100.0.23.1/26
+  mtu: 9000
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan24
+  tenant: test
+  description: vlan_24
+  shutdown: false
+  ip_address: 100.0.24.1/26
+  mtu: 9000
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan25
+  tenant: test
+  description: vlan_25
+  shutdown: false
+  ip_address: 100.0.25.1/26
+  mtu: 9000
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan26
+  tenant: test
+  description: vlan_26
+  shutdown: false
+  ip_address: 100.0.26.1/26
+  mtu: 9000
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan27
+  tenant: test
+  description: vlan_27
+  shutdown: false
+  ip_address: 100.0.27.1/26
+  mtu: 9000
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan28
+  tenant: test
+  description: vlan_28
+  shutdown: false
+  ip_address: 100.0.28.1/26
+  mtu: 9000
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Vlan29
+  tenant: test
+  description: vlan_29
+  shutdown: false
+  ip_address: 100.0.29.1/26
+  mtu: 9000
+  pim:
+    ipv4:
+      sparse_mode: true
 metadata:
   platform: default

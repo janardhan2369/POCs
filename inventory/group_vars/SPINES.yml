@@ -33,5 +33,11 @@ maintenance:
       on_boot:
         duration: 360
   default_interface_profile: 1Mbps
-  default_unit_profile: OnBoot_360seconds
+  default_unit_profile: OnBoot_360second
+
+custom_structured_configuration_router_bgp:
+  peer_groups:
+  - name: LEAF-SPINE
+    route_reflector_client: true 
+    next_hop_self: true
 

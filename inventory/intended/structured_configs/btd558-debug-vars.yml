@@ -7,9 +7,177 @@ ansible_become_method: enable
 ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
 type: l3leaf
+custom_templates:
+- custom_templates/mss-fw.j2
+- custom_templates/custom-tcam-profile.j2
+- custom_templates/oism.j2
+- custom_templates/mac-flush-disabled.j2
+mlag_ibgp_peering_vrfs:
+  base_vlan: 4050
+local_users:
+  admin:
+    privilege: 15
+    role: network-admin
+    no_password: true
+  cvpadmin:
+    privilege: 15
+    role: network-admin
+    sha512_password: $6$MUlXuH7QQNH4qejR$m2d./2h0PQd/Ls3V8IwSouMMIxrDMl7cobLtjKpXpAUU7f53RXp92RhKbQ.2fb7wm.TeYFO7f7D4kKmGwWKuC0
+  arista:
+    privilege: 15
+    role: network-admin
+    sha512_password: $6$fTv/8ehbz7BW408.$5uaZiXapZq7WazT6BrfDktsjLFM6MIpbnpZp62wEaCLZ6ILbw2WuQ2Z2THkiDQk.IXv2RpUZ13zbHfApT/EO81
+aaa_root:
+  secret:
+    sha512_password: $6$MUlXuH7QQNH4qejR$m2d./2h0PQd/Ls3V8IwSouMMIxrDMl7cobLtjKpXpAUU7f53RXp92RhKbQ.2fb7wm.TeYFO7f7D4kKmGwWKuC0
+aaa_authorization:
+  exec:
+    default: local
+aaa_authentication:
+  policies:
+    local:
+      allow_nopassword: true
+aliases: 'alias cc clear counters
+
+  alias senz show interface counter error | nz
+
+  alias snz show interface counter | nz
+
+  alias sqnz show interface counter queue | nz
+
+  alias srnz show interface counter rate | nz
+
+  '
+banners:
+  login: '---------------------------------------------------------
+
+    --                                                     --
+
+    --      Topology  TWO-SIGMA Ansible AVD Testing        --
+
+    --         please contact arunima@,janardhan@          --
+
+    --                                                     --
+
+    ---------------------------------------------------------
+
+    EOF
+
+    '
+prompt: '%H.%D{%H:%M:%S}%P'
+clock:
+  timezone: US/Pacific
+event_monitor:
+  enabled: true
+load_interval:
+  default: 2
+terminal:
+  length: 1000
+internal_vlan_order:
+  allocation: ascending
+  range:
+    beginning: 4010
+    ending: 4090
+cvp_instance_ips:
+- 172.28.134.30
+mgmt_interface: Management1
+mgmt_interface_vrf: default
+mgmt_gateway: 172.28.128.1
+mgmt_destination_networks:
+- 10.80.0.0/12
+- 172.16.0.0/12
+- 10.239.0.0/16
+- 10.240.0.0/13
+name_servers:
+- 172.22.60.20
+dns_domain: sjc.aristanetworks.com
+ntp:
+  local_interface:
+    name: Management1
+    vrf: MGMT
+  servers:
+  - name: 172.22.60.22
+    preferred: true
+    vrf: MGMT
+logging:
+  format:
+    timestamp: traditional
+    sequence_numbers: true
+  vrfs:
+    MGMT:
+      source_interface: Management1
+  console: debugging
+mac_address_table:
+  aging_time: 21600
+management_eapi:
+  enable_https: true
+  enable_http: true
+platform_settings:
+- platforms:
+  - default
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+- platforms:
+  - 7050SX3
+  reload_delay:
+    mlag: 660
+    non_mlag: 600
+port_profiles:
+  PO100:
+    mode: trunk
+    vlans: 30-39
+    port_channel:
+      mode: active
+  VLAN_LEAF11:
+    mode: trunk
+    vlans: 10-19
+  VLAN_LEAF21:
+    mode: trunk
+    vlans: 20-29
+servers:
+- name: dc1-Storage-Po100
+  rack: dc1-leaf31-Rack1
+  adapters:
+  - endpoint_ports:
+    - Eth1/1
+    - Eth2/1
+    switch_ports:
+    - Ethernet5/1
+    - Ethernet5/1
+    switches:
+    - btd558
+    - btd453
+    profile: PO100
+    port_channel:
+      description: PO100
+      mode: active
+- name: dc1-LEAF11
+  rack: dc1-LEAF11
+  adapters:
+  - endpoint_ports:
+    - Eth6/1
+    switch_ports:
+    - Ethernet6/1
+    switches:
+    - btd452
+    profile: VLAN_LEAF11
+- name: dc1-LEAF21
+  rack: dc1-LEAF21
+  adapters:
+  - endpoint_ports:
+    - Eth6/1
+    switch_ports:
+    - Ethernet6/1
+    switches:
+    - btp351
+    profile: VLAN_LEAF21
 fabric_name: Fabric-AVD
 underlay_multicast: true
-bgp-as: 65001
+bgp_peer_groups:
+  ipv4_underlay_peers:
+    name: LEAF-SPINE
+bgp_as: 65001
 underlay_multicast_rps:
 - rp: 2.0.0.1
   nodes:
@@ -22,15 +190,24 @@ underlay_multicast_anycast_rp:
 spine:
   defaults:
     platform: default
-    bgp_as: 65001
-    bgp_cluster_id: 1.1.1.1
     loopback_ipv4_pool: 1.0.0.0/24
   nodes:
   - name: btd555
     id: 1
+    bgp_peer_groups:
+      ipv4_underlay_peers:
+        structured_config: null
+    structured_config:
+      router_bgp:
+        redistribute_routes:
+        - source_protocol: connected
+        bgp_cluster_id: 1.1.1.1
     mgmt_ip: 172.28.138.46/20
   - name: btd556
     id: 2
+    structured_config:
+      router_bgp:
+        bgp_cluster_id: 1.1.1.1
     mgmt_ip: 172.28.138.47/20
 l3leaf:
   defaults:
@@ -38,10 +215,10 @@ l3leaf:
     loopback_ipv4_pool: 100.64.200.0/24
     loopback_ipv4_offset: 2
     uplink_interfaces:
-    - Ethernet14/1
-    - Ethernet15/1
-    - Ethernet16/1
-    - Ethernet17/1
+    - Ethernet1/1
+    - Ethernet2/1
+    - Ethernet3/1
+    - Ethernet4/1
     uplink_switches:
     - btd555
     - btd556
@@ -65,45 +242,78 @@ l3leaf:
           id: 1
           mgmt_ip: 172.28.138.14/20
           uplink_switch_interfaces:
-          - Ethernet15/1
-          - Ethernet20/1
-          - Ethernet21/1
-          - Ethernet20/5
+          - Ethernet3/1
+          - Ethernet7/1
+          - Ethernet8/1
+          - Ethernet9/1
         btd453:
           id: 2
           mgmt_ip: 172.28.137.61/20
           uplink_switch_interfaces:
-          - Ethernet15/5
-          - Ethernet21/5
-          - Ethernet22/1
-          - Ethernet22/5
+          - Ethernet4/1
+          - Ethernet10/1
+          - Ethernet11/1
+          - Ethernet12/1
     LEAF11:
       nodes:
         btd452:
+          structured_config:
+            prefix_lists:
+            - name: prefix_subnets
+              sequence_numbers:
+              - sequence: 10
+                action: permit 100.64.200.0/24 eq 32
+              - sequence: 20
+                action: permit 100.0.0.0/8 eq 26
+            route_maps:
+            - name: rm_subnets
+              sequence_numbers:
+              - sequence: 10
+                type: permit
+                match:
+                - ip address prefix-list prefix_subnets
+            router_bgp:
+              redistribute_routes:
+              - source_protocol: connected
+                route_map: rm_subnets
           id: 3
-          mgmt_ip: 172.28.137.60/20
-          uplink_interfaces:
-          - Ethernet14/1
-          - Ethernet15/1
-          - Ethernet16/1
-          - Ethernet17/1
-          uplink_switch_interfaces:
-          - Ethernet14/1
-          - Ethernet17/1
-          - Ethernet17/5
-          - Ethernet18/1
           bgp_as: 65001
+          mgmt_ip: 172.28.137.60/20
+          uplink_switch_interfaces:
+          - Ethernet1/1
+          - Ethernet1/1
+          - Ethernet2/1
+          - Ethernet3/1
     LEAF21:
       nodes:
         btp351:
+          structured_config:
+            prefix_lists:
+            - name: prefix_subnets
+              sequence_numbers:
+              - sequence: 10
+                action: permit 100.64.200.0/24 eq 32
+              - sequence: 20
+                action: permit 100.0.0.0/8 eq 26
+            route_maps:
+            - name: rm_subnets
+              sequence_numbers:
+              - sequence: 10
+                type: permit
+                match:
+                - ip address prefix-list prefix_subnets
+            router_bgp:
+              redistribute_routes:
+              - source_protocol: connected
+                route_map: rm_subnets
           bgp_as: 65001
           id: 4
           mgmt_ip: 172.28.138.18/20
           uplink_switch_interfaces:
-          - Ethernet14/5
-          - Ethernet18/5
-          - Ethernet19/1
-          - Ethernet19/5
+          - Ethernet2/1
+          - Ethernet4/1
+          - Ethernet5/1
+          - Ethernet6/1
 p2p_uplinks_mtu: 9214
 node_type_keys:
 - key: spine
@@ -150,19 +360,101 @@ tenants:
       ip_address: 100.0.30.2/26
       profile: enable_pim
       ip_virtual_router_addresses:
-      - 100.0.30.2
+      - 100.0.30.1
+    - id: 31
+      name: vlan_31
+      enabled: true
+      mtu: 9000
+      ip_address: 100.0.31.2/26
+      profile: enable_pim
+      ip_virtual_router_addresses:
+      - 100.0.31.1
+    - id: 32
+      name: vlan_32
+      enabled: true
+      mtu: 9000
+      ip_address: 100.0.32.2/26
+      profile: enable_pim
+      ip_virtual_router_addresses:
+      - 100.0.32.1
+    - id: 33
+      name: vlan_33
+      enabled: true
+      mtu: 9000
+      ip_address: 100.0.33.2/26
+      profile: enable_pim
+      ip_virtual_router_addresses:
+      - 100.0.33.1
+    - id: 34
+      name: vlan_34
+      enabled: true
+      mtu: 9000
+      ip_address: 100.0.34.2/26
+      profile: enable_pim
+      ip_virtual_router_addresses:
+      - 100.0.34.1
+    - id: 35
+      name: vlan_35
+      enabled: true
+      mtu: 9000
+      ip_address: 100.0.35.2/26
+      profile: enable_pim
+      ip_virtual_router_addresses:
+      - 100.0.35.1
+    - id: 36
+      name: vlan_36
+      enabled: true
+      mtu: 9000
+      ip_address: 100.0.36.2/26
+      profile: enable_pim
+      ip_virtual_router_addresses:
+      - 100.0.36.1
+    - id: 37
+      name: vlan_37
+      enabled: true
+      mtu: 9000
+      ip_address: 100.0.37.2/26
+      profile: enable_pim
+      ip_virtual_router_addresses:
+      - 100.0.37.1
+    - id: 38
+      name: vlan_38
+      enabled: true
+      mtu: 9000
+      ip_address: 100.0.38.2/26
+      profile: enable_pim
+      ip_virtual_router_addresses:
+      - 100.0.38.1
+    - id: 39
+      name: vlan_39
+      enabled: true
+      mtu: 9000
+      ip_address: 100.0.39.2/26
+      profile: enable_pim
+      ip_virtual_router_addresses:
+      - 100.0.39.1
 svi_profiles:
 - profile: enable_pim
   structured_config:
     pim:
       ipv4:
         sparse_mode: true
+custom_structured_configuration_ethernet_interfaces:
+- name: Ethernet6/1
+  description: connected to ixia
+  speed: forced 100gfull
+- name: Ethernet7/1
+  description: connected to ixia
+  speed: forced 100gfull
 inventory_file: /home/arista/custom-poc/two-sigma-poc/inventory/inventory.yml
 inventory_dir: /home/arista/custom-poc/two-sigma-poc/inventory
 ansible_host: 172.28.138.14
 inventory_hostname: btd558
 inventory_hostname_short: btd558
 group_names:
+- DC
+- DC_SERVERS
+- DC_VLANS
 - Fabric-AVD
 - LEAF31
 - LEAFS
@@ -173,322 +465,6 @@ vlan_interfaces:
       sparse_mode: true
 ansible_facts:
   avd_switch_facts:
-    btd452:
-      switch:
-        id: 3
-        type: l3leaf
-        platform: default
-        is_deployed: true
-        mgmt_interface: Management1
-        mgmt_ip: 172.28.137.60/20
-        mpls_lsr: false
-        loopback_ipv4_pool: 100.64.200.0/24
-        uplink_ipv4_pool: 100.64.102.0/24
-        bgp_as: '65001'
-        underlay_routing_protocol: ebgp
-        inband_ztp_lacp_fallback_delay: 30
-        group: LEAF11
-        router_id: 100.64.200.5
-        evpn_role: none
-        mpls_overlay_role: none
-        overlay:
-          peering_address: 100.64.200.5
-          evpn_mpls: false
-        max_parallel_uplinks: 1
-        max_uplink_switches: 4
-        uplinks:
-        - interface: Ethernet14/1
-          peer: btd555
-          peer_interface: Ethernet14/1
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.17
-          peer_ip_address: 100.64.102.16
-        - interface: Ethernet15/1
-          peer: btd556
-          peer_interface: Ethernet17/1
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.19
-          peer_ip_address: 100.64.102.18
-        - interface: Ethernet16/1
-          peer: btd556
-          peer_interface: Ethernet17/5
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.21
-          peer_ip_address: 100.64.102.20
-        - interface: Ethernet17/1
-          peer: btd556
-          peer_interface: Ethernet18/1
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.23
-          peer_ip_address: 100.64.102.22
-        uplink_peers:
-        - btd555
-        - btd556
-        vlans: 10-19
-        local_endpoint_trunk_groups: []
-        endpoint_trunk_groups: []
-    btp351:
-      switch:
-        id: 4
-        type: l3leaf
-        platform: default
-        is_deployed: true
-        mgmt_interface: Management1
-        mgmt_ip: 172.28.138.18/20
-        mpls_lsr: false
-        loopback_ipv4_pool: 100.64.200.0/24
-        uplink_ipv4_pool: 100.64.102.0/24
-        bgp_as: '65001'
-        underlay_routing_protocol: ebgp
-        inband_ztp_lacp_fallback_delay: 30
-        group: LEAF21
-        router_id: 100.64.200.6
-        evpn_role: none
-        mpls_overlay_role: none
-        overlay:
-          peering_address: 100.64.200.6
-          evpn_mpls: false
-        max_parallel_uplinks: 1
-        max_uplink_switches: 4
-        uplinks:
-        - interface: Ethernet14/1
-          peer: btd555
-          peer_interface: Ethernet14/5
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.25
-          peer_ip_address: 100.64.102.24
-        - interface: Ethernet15/1
-          peer: btd556
-          peer_interface: Ethernet18/5
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.27
-          peer_ip_address: 100.64.102.26
-        - interface: Ethernet16/1
-          peer: btd556
-          peer_interface: Ethernet19/1
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.29
-          peer_ip_address: 100.64.102.28
-        - interface: Ethernet17/1
-          peer: btd556
-          peer_interface: Ethernet19/5
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.31
-          peer_ip_address: 100.64.102.30
-        uplink_peers:
-        - btd555
-        - btd556
-        vlans: ''
-        local_endpoint_trunk_groups: []
-        endpoint_trunk_groups: []
-    btd558:
-      switch:
-        id: 1
-        type: l3leaf
-        platform: default
-        is_deployed: true
-        mgmt_interface: Management1
-        mgmt_ip: 172.28.138.14/20
-        mpls_lsr: false
-        loopback_ipv4_pool: 100.64.200.0/24
-        uplink_ipv4_pool: 100.64.102.0/24
-        bgp_as: '65001'
-        underlay_routing_protocol: ebgp
-        inband_ztp_lacp_fallback_delay: 30
-        group: STORAGE-LEAFs
-        router_id: 100.64.200.3
-        mlag_peer: btd453
-        mlag_port_channel_id: 61
-        mlag_interfaces:
-        - Ethernet6/1
-        - Ethernet7/1
-        mlag_ip: 10.1.5.0
-        mlag_l3_ip: 10.2.5.0
-        mlag_switch_ids:
-          primary: 1
-          secondary: 2
-        evpn_role: none
-        mpls_overlay_role: none
-        overlay:
-          peering_address: 100.64.200.3
-          evpn_mpls: false
-        max_parallel_uplinks: 1
-        max_uplink_switches: 4
-        uplinks:
-        - interface: Ethernet14/1
-          peer: btd555
-          peer_interface: Ethernet15/1
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.1
-          peer_ip_address: 100.64.102.0
-        - interface: Ethernet15/1
-          peer: btd556
-          peer_interface: Ethernet20/1
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.3
-          peer_ip_address: 100.64.102.2
-        - interface: Ethernet16/1
-          peer: btd556
-          peer_interface: Ethernet21/1
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.5
-          peer_ip_address: 100.64.102.4
-        - interface: Ethernet17/1
-          peer: btd556
-          peer_interface: Ethernet20/5
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.7
-          peer_ip_address: 100.64.102.6
-        uplink_peers:
-        - btd555
-        - btd556
-        vlans: '30'
-        local_endpoint_trunk_groups: []
-        endpoint_trunk_groups: []
-    btd453:
-      switch:
-        id: 2
-        type: l3leaf
-        platform: default
-        is_deployed: true
-        mgmt_interface: Management1
-        mgmt_ip: 172.28.137.61/20
-        mpls_lsr: false
-        loopback_ipv4_pool: 100.64.200.0/24
-        uplink_ipv4_pool: 100.64.102.0/24
-        bgp_as: '65001'
-        underlay_routing_protocol: ebgp
-        inband_ztp_lacp_fallback_delay: 30
-        group: STORAGE-LEAFs
-        router_id: 100.64.200.4
-        mlag_peer: btd558
-        mlag_port_channel_id: 61
-        mlag_interfaces:
-        - Ethernet6/1
-        - Ethernet7/1
-        mlag_ip: 10.1.5.1
-        mlag_l3_ip: 10.2.5.1
-        mlag_switch_ids:
-          primary: 1
-          secondary: 2
-        evpn_role: none
-        mpls_overlay_role: none
-        overlay:
-          peering_address: 100.64.200.4
-          evpn_mpls: false
-        max_parallel_uplinks: 1
-        max_uplink_switches: 4
-        uplinks:
-        - interface: Ethernet14/1
-          peer: btd555
-          peer_interface: Ethernet15/5
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.9
-          peer_ip_address: 100.64.102.8
-        - interface: Ethernet15/1
-          peer: btd556
-          peer_interface: Ethernet21/5
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.11
-          peer_ip_address: 100.64.102.10
-        - interface: Ethernet16/1
-          peer: btd556
-          peer_interface: Ethernet22/1
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.13
-          peer_ip_address: 100.64.102.12
-        - interface: Ethernet17/1
-          peer: btd556
-          peer_interface: Ethernet22/5
-          peer_type: spine
-          peer_is_deployed: true
-          peer_bgp_as: '65001'
-          type: underlay_p2p
-          underlay_multicast: true
-          prefix_length: 31
-          ip_address: 100.64.102.15
-          peer_ip_address: 100.64.102.14
-        uplink_peers:
-        - btd555
-        - btd556
-        vlans: ''
-        local_endpoint_trunk_groups: []
-        endpoint_trunk_groups: []
     btd555:
       switch:
         id: 1
@@ -541,6 +517,322 @@ ansible_facts:
         vlans: ''
         local_endpoint_trunk_groups: []
         endpoint_trunk_groups: []
+    btd452:
+      switch:
+        id: 3
+        type: l3leaf
+        platform: default
+        is_deployed: true
+        mgmt_interface: Management1
+        mgmt_ip: 172.28.137.60/20
+        mpls_lsr: false
+        loopback_ipv4_pool: 100.64.200.0/24
+        uplink_ipv4_pool: 100.64.102.0/24
+        bgp_as: '65001'
+        underlay_routing_protocol: ebgp
+        inband_ztp_lacp_fallback_delay: 30
+        group: LEAF11
+        router_id: 100.64.200.5
+        evpn_role: none
+        mpls_overlay_role: none
+        overlay:
+          peering_address: 100.64.200.5
+          evpn_mpls: false
+        max_parallel_uplinks: 1
+        max_uplink_switches: 4
+        uplinks:
+        - interface: Ethernet1/1
+          peer: btd555
+          peer_interface: Ethernet1/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.17
+          peer_ip_address: 100.64.102.16
+        - interface: Ethernet2/1
+          peer: btd556
+          peer_interface: Ethernet1/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.19
+          peer_ip_address: 100.64.102.18
+        - interface: Ethernet3/1
+          peer: btd556
+          peer_interface: Ethernet2/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.21
+          peer_ip_address: 100.64.102.20
+        - interface: Ethernet4/1
+          peer: btd556
+          peer_interface: Ethernet3/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.23
+          peer_ip_address: 100.64.102.22
+        uplink_peers:
+        - btd555
+        - btd556
+        vlans: 10-19
+        local_endpoint_trunk_groups: []
+        endpoint_trunk_groups: []
+    btp351:
+      switch:
+        id: 4
+        type: l3leaf
+        platform: default
+        is_deployed: true
+        mgmt_interface: Management1
+        mgmt_ip: 172.28.138.18/20
+        mpls_lsr: false
+        loopback_ipv4_pool: 100.64.200.0/24
+        uplink_ipv4_pool: 100.64.102.0/24
+        bgp_as: '65001'
+        underlay_routing_protocol: ebgp
+        inband_ztp_lacp_fallback_delay: 30
+        group: LEAF21
+        router_id: 100.64.200.6
+        evpn_role: none
+        mpls_overlay_role: none
+        overlay:
+          peering_address: 100.64.200.6
+          evpn_mpls: false
+        max_parallel_uplinks: 1
+        max_uplink_switches: 4
+        uplinks:
+        - interface: Ethernet1/1
+          peer: btd555
+          peer_interface: Ethernet2/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.25
+          peer_ip_address: 100.64.102.24
+        - interface: Ethernet2/1
+          peer: btd556
+          peer_interface: Ethernet4/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.27
+          peer_ip_address: 100.64.102.26
+        - interface: Ethernet3/1
+          peer: btd556
+          peer_interface: Ethernet5/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.29
+          peer_ip_address: 100.64.102.28
+        - interface: Ethernet4/1
+          peer: btd556
+          peer_interface: Ethernet6/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.31
+          peer_ip_address: 100.64.102.30
+        uplink_peers:
+        - btd555
+        - btd556
+        vlans: 20-29
+        local_endpoint_trunk_groups: []
+        endpoint_trunk_groups: []
+    btd558:
+      switch:
+        id: 1
+        type: l3leaf
+        platform: default
+        is_deployed: true
+        mgmt_interface: Management1
+        mgmt_ip: 172.28.138.14/20
+        mpls_lsr: false
+        loopback_ipv4_pool: 100.64.200.0/24
+        uplink_ipv4_pool: 100.64.102.0/24
+        bgp_as: '65001'
+        underlay_routing_protocol: ebgp
+        inband_ztp_lacp_fallback_delay: 30
+        group: STORAGE-LEAFs
+        router_id: 100.64.200.3
+        mlag_peer: btd453
+        mlag_port_channel_id: 61
+        mlag_interfaces:
+        - Ethernet6/1
+        - Ethernet7/1
+        mlag_ip: 10.1.5.0
+        mlag_l3_ip: 10.2.5.0
+        mlag_switch_ids:
+          primary: 1
+          secondary: 2
+        evpn_role: none
+        mpls_overlay_role: none
+        overlay:
+          peering_address: 100.64.200.3
+          evpn_mpls: false
+        max_parallel_uplinks: 1
+        max_uplink_switches: 4
+        uplinks:
+        - interface: Ethernet1/1
+          peer: btd555
+          peer_interface: Ethernet3/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.1
+          peer_ip_address: 100.64.102.0
+        - interface: Ethernet2/1
+          peer: btd556
+          peer_interface: Ethernet7/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.3
+          peer_ip_address: 100.64.102.2
+        - interface: Ethernet3/1
+          peer: btd556
+          peer_interface: Ethernet8/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.5
+          peer_ip_address: 100.64.102.4
+        - interface: Ethernet4/1
+          peer: btd556
+          peer_interface: Ethernet9/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.7
+          peer_ip_address: 100.64.102.6
+        uplink_peers:
+        - btd555
+        - btd556
+        vlans: 30-39
+        local_endpoint_trunk_groups: []
+        endpoint_trunk_groups: []
+    btd453:
+      switch:
+        id: 2
+        type: l3leaf
+        platform: default
+        is_deployed: true
+        mgmt_interface: Management1
+        mgmt_ip: 172.28.137.61/20
+        mpls_lsr: false
+        loopback_ipv4_pool: 100.64.200.0/24
+        uplink_ipv4_pool: 100.64.102.0/24
+        bgp_as: '65001'
+        underlay_routing_protocol: ebgp
+        inband_ztp_lacp_fallback_delay: 30
+        group: STORAGE-LEAFs
+        router_id: 100.64.200.4
+        mlag_peer: btd558
+        mlag_port_channel_id: 61
+        mlag_interfaces:
+        - Ethernet6/1
+        - Ethernet7/1
+        mlag_ip: 10.1.5.1
+        mlag_l3_ip: 10.2.5.1
+        mlag_switch_ids:
+          primary: 1
+          secondary: 2
+        evpn_role: none
+        mpls_overlay_role: none
+        overlay:
+          peering_address: 100.64.200.4
+          evpn_mpls: false
+        max_parallel_uplinks: 1
+        max_uplink_switches: 4
+        uplinks:
+        - interface: Ethernet1/1
+          peer: btd555
+          peer_interface: Ethernet4/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.9
+          peer_ip_address: 100.64.102.8
+        - interface: Ethernet2/1
+          peer: btd556
+          peer_interface: Ethernet10/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.11
+          peer_ip_address: 100.64.102.10
+        - interface: Ethernet3/1
+          peer: btd556
+          peer_interface: Ethernet11/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.13
+          peer_ip_address: 100.64.102.12
+        - interface: Ethernet4/1
+          peer: btd556
+          peer_interface: Ethernet12/1
+          peer_type: spine
+          peer_is_deployed: true
+          peer_bgp_as: '65001'
+          type: underlay_p2p
+          underlay_multicast: true
+          prefix_length: 31
+          ip_address: 100.64.102.15
+          peer_ip_address: 100.64.102.14
+        uplink_peers:
+        - btd555
+        - btd556
+        vlans: 30-39
+        local_endpoint_trunk_groups: []
+        endpoint_trunk_groups: []
   avd_overlay_peers: {}
   avd_topology_peers:
     btd555:
@@ -554,322 +846,6 @@ ansible_facts:
     - btd558
     - btd453
 avd_switch_facts:
-  btd452:
-    switch:
-      id: 3
-      type: l3leaf
-      platform: default
-      is_deployed: true
-      mgmt_interface: Management1
-      mgmt_ip: 172.28.137.60/20
-      mpls_lsr: false
-      loopback_ipv4_pool: 100.64.200.0/24
-      uplink_ipv4_pool: 100.64.102.0/24
-      bgp_as: '65001'
-      underlay_routing_protocol: ebgp
-      inband_ztp_lacp_fallback_delay: 30
-      group: LEAF11
-      router_id: 100.64.200.5
-      evpn_role: none
-      mpls_overlay_role: none
-      overlay:
-        peering_address: 100.64.200.5
-        evpn_mpls: false
-      max_parallel_uplinks: 1
-      max_uplink_switches: 4
-      uplinks:
-      - interface: Ethernet14/1
-        peer: btd555
-        peer_interface: Ethernet14/1
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.17
-        peer_ip_address: 100.64.102.16
-      - interface: Ethernet15/1
-        peer: btd556
-        peer_interface: Ethernet17/1
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.19
-        peer_ip_address: 100.64.102.18
-      - interface: Ethernet16/1
-        peer: btd556
-        peer_interface: Ethernet17/5
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.21
-        peer_ip_address: 100.64.102.20
-      - interface: Ethernet17/1
-        peer: btd556
-        peer_interface: Ethernet18/1
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.23
-        peer_ip_address: 100.64.102.22
-      uplink_peers:
-      - btd555
-      - btd556
-      vlans: 10-19
-      local_endpoint_trunk_groups: []
-      endpoint_trunk_groups: []
-  btp351:
-    switch:
-      id: 4
-      type: l3leaf
-      platform: default
-      is_deployed: true
-      mgmt_interface: Management1
-      mgmt_ip: 172.28.138.18/20
-      mpls_lsr: false
-      loopback_ipv4_pool: 100.64.200.0/24
-      uplink_ipv4_pool: 100.64.102.0/24
-      bgp_as: '65001'
-      underlay_routing_protocol: ebgp
-      inband_ztp_lacp_fallback_delay: 30
-      group: LEAF21
-      router_id: 100.64.200.6
-      evpn_role: none
-      mpls_overlay_role: none
-      overlay:
-        peering_address: 100.64.200.6
-        evpn_mpls: false
-      max_parallel_uplinks: 1
-      max_uplink_switches: 4
-      uplinks:
-      - interface: Ethernet14/1
-        peer: btd555
-        peer_interface: Ethernet14/5
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.25
-        peer_ip_address: 100.64.102.24
-      - interface: Ethernet15/1
-        peer: btd556
-        peer_interface: Ethernet18/5
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.27
-        peer_ip_address: 100.64.102.26
-      - interface: Ethernet16/1
-        peer: btd556
-        peer_interface: Ethernet19/1
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.29
-        peer_ip_address: 100.64.102.28
-      - interface: Ethernet17/1
-        peer: btd556
-        peer_interface: Ethernet19/5
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.31
-        peer_ip_address: 100.64.102.30
-      uplink_peers:
-      - btd555
-      - btd556
-      vlans: ''
-      local_endpoint_trunk_groups: []
-      endpoint_trunk_groups: []
-  btd558:
-    switch:
-      id: 1
-      type: l3leaf
-      platform: default
-      is_deployed: true
-      mgmt_interface: Management1
-      mgmt_ip: 172.28.138.14/20
-      mpls_lsr: false
-      loopback_ipv4_pool: 100.64.200.0/24
-      uplink_ipv4_pool: 100.64.102.0/24
-      bgp_as: '65001'
-      underlay_routing_protocol: ebgp
-      inband_ztp_lacp_fallback_delay: 30
-      group: STORAGE-LEAFs
-      router_id: 100.64.200.3
-      mlag_peer: btd453
-      mlag_port_channel_id: 61
-      mlag_interfaces:
-      - Ethernet6/1
-      - Ethernet7/1
-      mlag_ip: 10.1.5.0
-      mlag_l3_ip: 10.2.5.0
-      mlag_switch_ids:
-        primary: 1
-        secondary: 2
-      evpn_role: none
-      mpls_overlay_role: none
-      overlay:
-        peering_address: 100.64.200.3
-        evpn_mpls: false
-      max_parallel_uplinks: 1
-      max_uplink_switches: 4
-      uplinks:
-      - interface: Ethernet14/1
-        peer: btd555
-        peer_interface: Ethernet15/1
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.1
-        peer_ip_address: 100.64.102.0
-      - interface: Ethernet15/1
-        peer: btd556
-        peer_interface: Ethernet20/1
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.3
-        peer_ip_address: 100.64.102.2
-      - interface: Ethernet16/1
-        peer: btd556
-        peer_interface: Ethernet21/1
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.5
-        peer_ip_address: 100.64.102.4
-      - interface: Ethernet17/1
-        peer: btd556
-        peer_interface: Ethernet20/5
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.7
-        peer_ip_address: 100.64.102.6
-      uplink_peers:
-      - btd555
-      - btd556
-      vlans: '30'
-      local_endpoint_trunk_groups: []
-      endpoint_trunk_groups: []
-  btd453:
-    switch:
-      id: 2
-      type: l3leaf
-      platform: default
-      is_deployed: true
-      mgmt_interface: Management1
-      mgmt_ip: 172.28.137.61/20
-      mpls_lsr: false
-      loopback_ipv4_pool: 100.64.200.0/24
-      uplink_ipv4_pool: 100.64.102.0/24
-      bgp_as: '65001'
-      underlay_routing_protocol: ebgp
-      inband_ztp_lacp_fallback_delay: 30
-      group: STORAGE-LEAFs
-      router_id: 100.64.200.4
-      mlag_peer: btd558
-      mlag_port_channel_id: 61
-      mlag_interfaces:
-      - Ethernet6/1
-      - Ethernet7/1
-      mlag_ip: 10.1.5.1
-      mlag_l3_ip: 10.2.5.1
-      mlag_switch_ids:
-        primary: 1
-        secondary: 2
-      evpn_role: none
-      mpls_overlay_role: none
-      overlay:
-        peering_address: 100.64.200.4
-        evpn_mpls: false
-      max_parallel_uplinks: 1
-      max_uplink_switches: 4
-      uplinks:
-      - interface: Ethernet14/1
-        peer: btd555
-        peer_interface: Ethernet15/5
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.9
-        peer_ip_address: 100.64.102.8
-      - interface: Ethernet15/1
-        peer: btd556
-        peer_interface: Ethernet21/5
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.11
-        peer_ip_address: 100.64.102.10
-      - interface: Ethernet16/1
-        peer: btd556
-        peer_interface: Ethernet22/1
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.13
-        peer_ip_address: 100.64.102.12
-      - interface: Ethernet17/1
-        peer: btd556
-        peer_interface: Ethernet22/5
-        peer_type: spine
-        peer_is_deployed: true
-        peer_bgp_as: '65001'
-        type: underlay_p2p
-        underlay_multicast: true
-        prefix_length: 31
-        ip_address: 100.64.102.15
-        peer_ip_address: 100.64.102.14
-      uplink_peers:
-      - btd555
-      - btd556
-      vlans: ''
-      local_endpoint_trunk_groups: []
-      endpoint_trunk_groups: []
   btd555:
     switch:
       id: 1
@@ -922,6 +898,322 @@ avd_switch_facts:
       vlans: ''
       local_endpoint_trunk_groups: []
       endpoint_trunk_groups: []
+  btd452:
+    switch:
+      id: 3
+      type: l3leaf
+      platform: default
+      is_deployed: true
+      mgmt_interface: Management1
+      mgmt_ip: 172.28.137.60/20
+      mpls_lsr: false
+      loopback_ipv4_pool: 100.64.200.0/24
+      uplink_ipv4_pool: 100.64.102.0/24
+      bgp_as: '65001'
+      underlay_routing_protocol: ebgp
+      inband_ztp_lacp_fallback_delay: 30
+      group: LEAF11
+      router_id: 100.64.200.5
+      evpn_role: none
+      mpls_overlay_role: none
+      overlay:
+        peering_address: 100.64.200.5
+        evpn_mpls: false
+      max_parallel_uplinks: 1
+      max_uplink_switches: 4
+      uplinks:
+      - interface: Ethernet1/1
+        peer: btd555
+        peer_interface: Ethernet1/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.17
+        peer_ip_address: 100.64.102.16
+      - interface: Ethernet2/1
+        peer: btd556
+        peer_interface: Ethernet1/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.19
+        peer_ip_address: 100.64.102.18
+      - interface: Ethernet3/1
+        peer: btd556
+        peer_interface: Ethernet2/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.21
+        peer_ip_address: 100.64.102.20
+      - interface: Ethernet4/1
+        peer: btd556
+        peer_interface: Ethernet3/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.23
+        peer_ip_address: 100.64.102.22
+      uplink_peers:
+      - btd555
+      - btd556
+      vlans: 10-19
+      local_endpoint_trunk_groups: []
+      endpoint_trunk_groups: []
+  btp351:
+    switch:
+      id: 4
+      type: l3leaf
+      platform: default
+      is_deployed: true
+      mgmt_interface: Management1
+      mgmt_ip: 172.28.138.18/20
+      mpls_lsr: false
+      loopback_ipv4_pool: 100.64.200.0/24
+      uplink_ipv4_pool: 100.64.102.0/24
+      bgp_as: '65001'
+      underlay_routing_protocol: ebgp
+      inband_ztp_lacp_fallback_delay: 30
+      group: LEAF21
+      router_id: 100.64.200.6
+      evpn_role: none
+      mpls_overlay_role: none
+      overlay:
+        peering_address: 100.64.200.6
+        evpn_mpls: false
+      max_parallel_uplinks: 1
+      max_uplink_switches: 4
+      uplinks:
+      - interface: Ethernet1/1
+        peer: btd555
+        peer_interface: Ethernet2/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.25
+        peer_ip_address: 100.64.102.24
+      - interface: Ethernet2/1
+        peer: btd556
+        peer_interface: Ethernet4/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.27
+        peer_ip_address: 100.64.102.26
+      - interface: Ethernet3/1
+        peer: btd556
+        peer_interface: Ethernet5/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.29
+        peer_ip_address: 100.64.102.28
+      - interface: Ethernet4/1
+        peer: btd556
+        peer_interface: Ethernet6/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.31
+        peer_ip_address: 100.64.102.30
+      uplink_peers:
+      - btd555
+      - btd556
+      vlans: 20-29
+      local_endpoint_trunk_groups: []
+      endpoint_trunk_groups: []
+  btd558:
+    switch:
+      id: 1
+      type: l3leaf
+      platform: default
+      is_deployed: true
+      mgmt_interface: Management1
+      mgmt_ip: 172.28.138.14/20
+      mpls_lsr: false
+      loopback_ipv4_pool: 100.64.200.0/24
+      uplink_ipv4_pool: 100.64.102.0/24
+      bgp_as: '65001'
+      underlay_routing_protocol: ebgp
+      inband_ztp_lacp_fallback_delay: 30
+      group: STORAGE-LEAFs
+      router_id: 100.64.200.3
+      mlag_peer: btd453
+      mlag_port_channel_id: 61
+      mlag_interfaces:
+      - Ethernet6/1
+      - Ethernet7/1
+      mlag_ip: 10.1.5.0
+      mlag_l3_ip: 10.2.5.0
+      mlag_switch_ids:
+        primary: 1
+        secondary: 2
+      evpn_role: none
+      mpls_overlay_role: none
+      overlay:
+        peering_address: 100.64.200.3
+        evpn_mpls: false
+      max_parallel_uplinks: 1
+      max_uplink_switches: 4
+      uplinks:
+      - interface: Ethernet1/1
+        peer: btd555
+        peer_interface: Ethernet3/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.1
+        peer_ip_address: 100.64.102.0
+      - interface: Ethernet2/1
+        peer: btd556
+        peer_interface: Ethernet7/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.3
+        peer_ip_address: 100.64.102.2
+      - interface: Ethernet3/1
+        peer: btd556
+        peer_interface: Ethernet8/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.5
+        peer_ip_address: 100.64.102.4
+      - interface: Ethernet4/1
+        peer: btd556
+        peer_interface: Ethernet9/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.7
+        peer_ip_address: 100.64.102.6
+      uplink_peers:
+      - btd555
+      - btd556
+      vlans: 30-39
+      local_endpoint_trunk_groups: []
+      endpoint_trunk_groups: []
+  btd453:
+    switch:
+      id: 2
+      type: l3leaf
+      platform: default
+      is_deployed: true
+      mgmt_interface: Management1
+      mgmt_ip: 172.28.137.61/20
+      mpls_lsr: false
+      loopback_ipv4_pool: 100.64.200.0/24
+      uplink_ipv4_pool: 100.64.102.0/24
+      bgp_as: '65001'
+      underlay_routing_protocol: ebgp
+      inband_ztp_lacp_fallback_delay: 30
+      group: STORAGE-LEAFs
+      router_id: 100.64.200.4
+      mlag_peer: btd558
+      mlag_port_channel_id: 61
+      mlag_interfaces:
+      - Ethernet6/1
+      - Ethernet7/1
+      mlag_ip: 10.1.5.1
+      mlag_l3_ip: 10.2.5.1
+      mlag_switch_ids:
+        primary: 1
+        secondary: 2
+      evpn_role: none
+      mpls_overlay_role: none
+      overlay:
+        peering_address: 100.64.200.4
+        evpn_mpls: false
+      max_parallel_uplinks: 1
+      max_uplink_switches: 4
+      uplinks:
+      - interface: Ethernet1/1
+        peer: btd555
+        peer_interface: Ethernet4/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.9
+        peer_ip_address: 100.64.102.8
+      - interface: Ethernet2/1
+        peer: btd556
+        peer_interface: Ethernet10/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.11
+        peer_ip_address: 100.64.102.10
+      - interface: Ethernet3/1
+        peer: btd556
+        peer_interface: Ethernet11/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.13
+        peer_ip_address: 100.64.102.12
+      - interface: Ethernet4/1
+        peer: btd556
+        peer_interface: Ethernet12/1
+        peer_type: spine
+        peer_is_deployed: true
+        peer_bgp_as: '65001'
+        type: underlay_p2p
+        underlay_multicast: true
+        prefix_length: 31
+        ip_address: 100.64.102.15
+        peer_ip_address: 100.64.102.14
+      uplink_peers:
+      - btd555
+      - btd556
+      vlans: 30-39
+      local_endpoint_trunk_groups: []
+      endpoint_trunk_groups: []
 avd_overlay_peers: {}
 avd_topology_peers:
   btd555:
@@ -944,17 +1236,30 @@ groups:
   all:
   - cv_ztp
   - cv_server
-  ungrouped: []
-  CVP:
-  - cv_ztp
-  - cv_server
-  Fabric-AVD:
+  - btd555
+  - btd556
   - btd452
   - btp351
   - btd558
   - btd453
+  ungrouped: []
+  CVP:
+  - cv_ztp
+  - cv_server
+  DC:
   - btd555
   - btd556
+  - btd452
+  - btp351
+  - btd558
+  - btd453
+  Fabric-AVD:
+  - btd555
+  - btd556
+  - btd452
+  - btp351
+  - btd558
+  - btd453
   SPINES:
   - btd555
   - btd556
@@ -975,7 +1280,17 @@ groups:
   - btd558
   LEAF32:
   - btd453
-omit: __omit_place_holder__ab8ffc74968dcc428dbcf8b3fc854ddd082b186d
+  DC_VLANS:
+  - btd452
+  - btp351
+  - btd558
+  - btd453
+  DC_SERVERS:
+  - btd452
+  - btp351
+  - btd558
+  - btd453
+omit: __omit_place_holder__11dd63f3201b9442d824f192e0921d76e4f1d102
 ansible_version:
   string: 2.16.3
   full: 2.16.3

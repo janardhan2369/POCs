@@ -109,7 +109,7 @@ cvp_instance_ips:
 
 # OOB Management network default gateway.
 mgmt_interface: Management1
-mgmt_interface_vrf: MGMT
+mgmt_interface_vrf: default
 mgmt_gateway: 172.28.128.1
 
 # OOB mgmt interface destination network - overide default route

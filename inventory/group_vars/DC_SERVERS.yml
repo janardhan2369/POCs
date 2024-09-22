@@ -31,7 +31,7 @@ servers:
     adapters:
     #  - type: nic
       - endpoint_ports: [Eth6/1]
-        switch_ports: [Ethernet5/1]
+        switch_ports: [Ethernet6/1]
         switches: [btd452]
         profile: VLAN_LEAF11 
   - name: dc1-LEAF21
@@ -39,6 +39,6 @@ servers:
     adapters:
     #  - type: nic
       - endpoint_ports: [Eth6/1]
-        switch_ports: [Ethernet5/1]
+        switch_ports: [Ethernet6/1]
         switches: [btp351]
         profile: VLAN_LEAF21

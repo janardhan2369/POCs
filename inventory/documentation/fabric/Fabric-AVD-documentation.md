@@ -35,24 +35,24 @@
 
 | Type | Node | Node Interface | Peer Type | Peer Node | Peer Interface |
 | ---- | ---- | -------------- | --------- | ----------| -------------- |
-| l3leaf | btd452 | Ethernet14/1 | spine | btd555 | Ethernet14/1 |
-| l3leaf | btd452 | Ethernet15/1 | spine | btd556 | Ethernet17/1 |
-| l3leaf | btd452 | Ethernet16/1 | spine | btd556 | Ethernet17/5 |
-| l3leaf | btd452 | Ethernet17/1 | spine | btd556 | Ethernet18/1 |
+| l3leaf | btd452 | Ethernet1/1 | spine | btd555 | Ethernet1/1 |
+| l3leaf | btd452 | Ethernet2/1 | spine | btd556 | Ethernet1/1 |
+| l3leaf | btd452 | Ethernet3/1 | spine | btd556 | Ethernet2/1 |
+| l3leaf | btd452 | Ethernet4/1 | spine | btd556 | Ethernet3/1 |
+| l3leaf | btd453 | Ethernet1/1 | spine | btd555 | Ethernet4/1 |
+| l3leaf | btd453 | Ethernet2/1 | spine | btd556 | Ethernet10/1 |
+| l3leaf | btd453 | Ethernet3/1 | spine | btd556 | Ethernet11/1 |
+| l3leaf | btd453 | Ethernet4/1 | spine | btd556 | Ethernet12/1 |
 | l3leaf | btd453 | Ethernet6/1 | mlag_peer | btd558 | Ethernet6/1 |
 | l3leaf | btd453 | Ethernet7/1 | mlag_peer | btd558 | Ethernet7/1 |
-| l3leaf | btd453 | Ethernet14/1 | spine | btd555 | Ethernet15/5 |
-| l3leaf | btd453 | Ethernet15/1 | spine | btd556 | Ethernet21/5 |
-| l3leaf | btd453 | Ethernet16/1 | spine | btd556 | Ethernet22/1 |
-| l3leaf | btd453 | Ethernet17/1 | spine | btd556 | Ethernet22/5 |
-| spine | btd555 | Ethernet14/5 | l3leaf | btp351 | Ethernet14/1 |
-| spine | btd555 | Ethernet15/1 | l3leaf | btd558 | Ethernet14/1 |
-| spine | btd556 | Ethernet18/5 | l3leaf | btp351 | Ethernet15/1 |
-| spine | btd556 | Ethernet19/1 | l3leaf | btp351 | Ethernet16/1 |
-| spine | btd556 | Ethernet19/5 | l3leaf | btp351 | Ethernet17/1 |
-| spine | btd556 | Ethernet20/1 | l3leaf | btd558 | Ethernet15/1 |
-| spine | btd556 | Ethernet20/5 | l3leaf | btd558 | Ethernet17/1 |
-| spine | btd556 | Ethernet21/1 | l3leaf | btd558 | Ethernet16/1 |
+| spine | btd555 | Ethernet2/1 | l3leaf | btp351 | Ethernet1/1 |
+| spine | btd555 | Ethernet3/1 | l3leaf | btd558 | Ethernet1/1 |
+| spine | btd556 | Ethernet4/1 | l3leaf | btp351 | Ethernet2/1 |
+| spine | btd556 | Ethernet5/1 | l3leaf | btp351 | Ethernet3/1 |
+| spine | btd556 | Ethernet6/1 | l3leaf | btp351 | Ethernet4/1 |
+| spine | btd556 | Ethernet7/1 | l3leaf | btd558 | Ethernet2/1 |
+| spine | btd556 | Ethernet8/1 | l3leaf | btd558 | Ethernet3/1 |
+| spine | btd556 | Ethernet9/1 | l3leaf | btd558 | Ethernet4/1 |
 
 ## Fabric IP Allocation
 
@@ -66,22 +66,22 @@
 
 | Node | Node Interface | Node IP Address | Peer Node | Peer Interface | Peer IP Address |
 | ---- | -------------- | --------------- | --------- | -------------- | --------------- |
-| btd452 | Ethernet14/1 | 100.64.102.17/31 | btd555 | Ethernet14/1 | 100.64.102.16/31 |
-| btd452 | Ethernet15/1 | 100.64.102.19/31 | btd556 | Ethernet17/1 | 100.64.102.18/31 |
-| btd452 | Ethernet16/1 | 100.64.102.21/31 | btd556 | Ethernet17/5 | 100.64.102.20/31 |
-| btd452 | Ethernet17/1 | 100.64.102.23/31 | btd556 | Ethernet18/1 | 100.64.102.22/31 |
-| btd453 | Ethernet14/1 | 100.64.102.9/31 | btd555 | Ethernet15/5 | 100.64.102.8/31 |
-| btd453 | Ethernet15/1 | 100.64.102.11/31 | btd556 | Ethernet21/5 | 100.64.102.10/31 |
-| btd453 | Ethernet16/1 | 100.64.102.13/31 | btd556 | Ethernet22/1 | 100.64.102.12/31 |
-| btd453 | Ethernet17/1 | 100.64.102.15/31 | btd556 | Ethernet22/5 | 100.64.102.14/31 |
-| btd555 | Ethernet14/5 | 100.64.102.24/31 | btp351 | Ethernet14/1 | 100.64.102.25/31 |
-| btd555 | Ethernet15/1 | 100.64.102.0/31 | btd558 | Ethernet14/1 | 100.64.102.1/31 |
-| btd556 | Ethernet18/5 | 100.64.102.26/31 | btp351 | Ethernet15/1 | 100.64.102.27/31 |
-| btd556 | Ethernet19/1 | 100.64.102.28/31 | btp351 | Ethernet16/1 | 100.64.102.29/31 |
-| btd556 | Ethernet19/5 | 100.64.102.30/31 | btp351 | Ethernet17/1 | 100.64.102.31/31 |
-| btd556 | Ethernet20/1 | 100.64.102.2/31 | btd558 | Ethernet15/1 | 100.64.102.3/31 |
-| btd556 | Ethernet20/5 | 100.64.102.6/31 | btd558 | Ethernet17/1 | 100.64.102.7/31 |
-| btd556 | Ethernet21/1 | 100.64.102.4/31 | btd558 | Ethernet16/1 | 100.64.102.5/31 |
+| btd452 | Ethernet1/1 | 100.64.102.17/31 | btd555 | Ethernet1/1 | 100.64.102.16/31 |
+| btd452 | Ethernet2/1 | 100.64.102.19/31 | btd556 | Ethernet1/1 | 100.64.102.18/31 |
+| btd452 | Ethernet3/1 | 100.64.102.21/31 | btd556 | Ethernet2/1 | 100.64.102.20/31 |
+| btd452 | Ethernet4/1 | 100.64.102.23/31 | btd556 | Ethernet3/1 | 100.64.102.22/31 |
+| btd453 | Ethernet1/1 | 100.64.102.9/31 | btd555 | Ethernet4/1 | 100.64.102.8/31 |
+| btd453 | Ethernet2/1 | 100.64.102.11/31 | btd556 | Ethernet10/1 | 100.64.102.10/31 |
+| btd453 | Ethernet3/1 | 100.64.102.13/31 | btd556 | Ethernet11/1 | 100.64.102.12/31 |
+| btd453 | Ethernet4/1 | 100.64.102.15/31 | btd556 | Ethernet12/1 | 100.64.102.14/31 |
+| btd555 | Ethernet2/1 | 100.64.102.24/31 | btp351 | Ethernet1/1 | 100.64.102.25/31 |
+| btd555 | Ethernet3/1 | 100.64.102.0/31 | btd558 | Ethernet1/1 | 100.64.102.1/31 |
+| btd556 | Ethernet4/1 | 100.64.102.26/31 | btp351 | Ethernet2/1 | 100.64.102.27/31 |
+| btd556 | Ethernet5/1 | 100.64.102.28/31 | btp351 | Ethernet3/1 | 100.64.102.29/31 |
+| btd556 | Ethernet6/1 | 100.64.102.30/31 | btp351 | Ethernet4/1 | 100.64.102.31/31 |
+| btd556 | Ethernet7/1 | 100.64.102.2/31 | btd558 | Ethernet2/1 | 100.64.102.3/31 |
+| btd556 | Ethernet8/1 | 100.64.102.4/31 | btd558 | Ethernet3/1 | 100.64.102.5/31 |
+| btd556 | Ethernet9/1 | 100.64.102.6/31 | btd558 | Ethernet4/1 | 100.64.102.7/31 |
 
 ### Loopback Interfaces (BGP EVPN Peering)
 

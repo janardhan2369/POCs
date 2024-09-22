@@ -1,0 +1,104 @@
+---
+tenants:
+  - name: test
+    vrfs:
+      - name: default
+        svis:
+          - id: 20
+            name: vlan_20
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.20.1/26
+            profile: enable_pim
+
+          - id: 21
+            name: vlan_21
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.21.1/26
+            profile: enable_pim
+
+          - id: 22
+            name: vlan_22
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.22.1/26
+            profile: enable_pim
+
+          - id: 23
+            name: vlan_23
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.23.1/26
+            profile: enable_pim
+
+          - id: 24
+            name: vlan_24
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.24.1/26
+            profile: enable_pim
+
+          - id: 25
+            name: vlan_25
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.25.1/26
+            profile: enable_pim
+
+
+          - id: 26
+            name: vlan_26
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.26.1/26
+            profile: enable_pim
+
+          - id: 27
+            name: vlan_27
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.27.1/26
+            profile: enable_pim
+
+          - id: 28
+            name: vlan_28
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.28.1/26
+            profile: enable_pim
+
+          - id: 29
+            name: vlan_29
+            enabled: true
+            mtu: 9000
+            ip_address: 100.0.29.1/26
+            profile: enable_pim           
+svi_profiles:
+  - profile: enable_pim
+    structured_config:
+      pim:
+       ipv4:
+         sparse_mode: true   
+
+custom_structured_configuration_ethernet_interfaces:
+   - name: Ethernet6/1
+     description: 'connected to ixia'
+     type: 'switchport'
+     speed: 'forced 10000full'
+   - name: Ethernet14/1
+     description: 'connected to ixia'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet15/1
+     description: 'connected to ixia'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet16/1
+     description: 'connected to ixia'
+     type: 'routed'
+     speed: 'forced 100gfull'
+   - name: Ethernet17/1
+     description: 'connected to ixia'
+     type: 'routed'
+     speed: 'forced 100gfull'

@@ -4,75 +4,75 @@ tenants:
     vrfs:
       - name: default
         svis:
-          - id: 10
-            name: vlan_10
+          - id: 20
+            name: vlan_20
             enabled: true
             mtu: 9000
-            ip_address: 100.0.10.1/26
+            ip_address: 100.0.20.1/26
             profile: enable_pim
 
-          - id: 11
-            name: vlan_11
+          - id: 21
+            name: vlan_21
             enabled: true
             mtu: 9000
-            ip_address: 100.0.11.1/26
+            ip_address: 100.0.21.1/26
             profile: enable_pim
 
-          - id: 12
-            name: vlan_12
+          - id: 22
+            name: vlan_22
             enabled: true
             mtu: 9000
-            ip_address: 100.0.12.1/26
+            ip_address: 100.0.22.1/26
             profile: enable_pim
 
-          - id: 13
-            name: vlan_13
+          - id: 23
+            name: vlan_23
             enabled: true
             mtu: 9000
-            ip_address: 100.0.13.1/26
+            ip_address: 100.0.23.1/26
             profile: enable_pim
 
-          - id: 14
-            name: vlan_14
+          - id: 24
+            name: vlan_24
             enabled: true
             mtu: 9000
-            ip_address: 100.0.14.1/26
+            ip_address: 100.0.24.1/26
             profile: enable_pim
 
-          - id: 15
-            name: vlan_15
+          - id: 25
+            name: vlan_25
             enabled: true
             mtu: 9000
-            ip_address: 100.0.15.1/26
+            ip_address: 100.0.25.1/26
             profile: enable_pim
 
 
-          - id: 16
-            name: vlan_16
+          - id: 26
+            name: vlan_26
             enabled: true
             mtu: 9000
-            ip_address: 100.0.16.1/26
+            ip_address: 100.0.26.1/26
             profile: enable_pim
 
-          - id: 17
-            name: vlan_17
+          - id: 27
+            name: vlan_27
             enabled: true
             mtu: 9000
-            ip_address: 100.0.17.1/26
+            ip_address: 100.0.27.1/26
             profile: enable_pim
 
-          - id: 18
-            name: vlan_18
+          - id: 28
+            name: vlan_28
             enabled: true
             mtu: 9000
-            ip_address: 100.0.18.1/26
+            ip_address: 100.0.28.1/26
             profile: enable_pim
 
-          - id: 19
-            name: vlan_19
+          - id: 29
+            name: vlan_29
             enabled: true
             mtu: 9000
-            ip_address: 100.0.19.1/26
+            ip_address: 100.0.29.1/26
             profile: enable_pim           
 svi_profiles:
   - profile: enable_pim
@@ -85,3 +85,4 @@ custom_structured_configuration_ethernet_interfaces:
    - name: Ethernet6/1
      description: 'connected to ixia'
      speed: 'forced 10000full'
+ 
