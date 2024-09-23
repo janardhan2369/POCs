@@ -1,6 +1,9 @@
 
 fabric_name: Fabric-AVD
 underlay_multicast: true
+bgp_peer_groups:
+  ipv4_underlay_peers:
+    name: LEAF-SPINE
 #underlay_routing_protocol: ospf
 bgp_as: 65001      
 underlay_multicast_rps:
@@ -19,16 +22,22 @@ underlay_multicast_anycast_rp:
 spine:
   defaults:
     platform: default
-    
     loopback_ipv4_pool: 1.0.0.0/24
   nodes:
     - name: btd555
       id: 1
+      bgp_peer_groups:
+        ipv4_underlay_peers:
+          structured_config:
+
       structured_config:
         router_bgp:
           redistribute_routes:
             - source_protocol: connected
           bgp_cluster_id: 1.1.1.1
+
+
+
 
       mgmt_ip: 172.28.138.46/20
     - name: btd556
@@ -43,7 +52,8 @@ l3leaf:
     platform: default
     loopback_ipv4_pool: 100.64.200.0/24
     loopback_ipv4_offset: 2
-    uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet16/1', 'Ethernet17/1']
+    uplink_interfaces: ['Ethernet1/1', 'Ethernet2/1', 'Ethernet3/1', 'Ethernet4/1']
+
     uplink_switches: ['btd555', 'btd556', 'btd556', 'btd556']
     uplink_ipv4_pool: 100.64.102.0/24
     spanning_tree_mode: mstp
@@ -64,12 +74,12 @@ l3leaf:
           id: 1
           mgmt_ip: 172.28.138.14/20
           #uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet17/1', 'Ethernet16/1']
-          uplink_switch_interfaces: ['Ethernet15/1', 'Ethernet20/1', 'Ethernet21/1', 'Ethernet20/5']
+          uplink_switch_interfaces: ['Ethernet3/1', 'Ethernet7/1', 'Ethernet8/1', 'Ethernet9/1']
         btd453:
           id: 2
           mgmt_ip: 172.28.137.61/20
           #uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet17/1', 'Ethernet16/1']
-          uplink_switch_interfaces: ['Ethernet15/5', 'Ethernet21/5', 'Ethernet22/1', 'Ethernet22/5']
+          uplink_switch_interfaces: ['Ethernet4/1', 'Ethernet10/1', 'Ethernet11/1', 'Ethernet12/1']
     LEAF11:
       nodes:
         btd452:
@@ -96,8 +106,8 @@ l3leaf:
           id: 3
           bgp_as: 65001
           mgmt_ip: 172.28.137.60/20
-          uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet16/1', 'Ethernet17/1']
-          uplink_switch_interfaces: ['Ethernet14/1', 'Ethernet17/1', 'Ethernet17/5', 'Ethernet18/1']   
+          #uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet16/1', 'Ethernet17/1']
+          uplink_switch_interfaces: ['Ethernet1/1', 'Ethernet1/1', 'Ethernet2/1', 'Ethernet3/1']   
     LEAF21:
       nodes:
         btp351:
@@ -125,7 +135,7 @@ l3leaf:
           id: 4
           mgmt_ip: 172.28.138.18/20
           #uplink_interfaces: ['Ethernet14/1', 'Ethernet15/1', 'Ethernet16/1', 'Ethernet17/1']
-          uplink_switch_interfaces: ['Ethernet14/5', 'Ethernet18/5', 'Ethernet19/1', 'Ethernet19/5']
+          uplink_switch_interfaces: ['Ethernet2/1', 'Ethernet4/1', 'Ethernet5/1', 'Ethernet6/1']
 p2p_uplinks_mtu: 9214
 
  

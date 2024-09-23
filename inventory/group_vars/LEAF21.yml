@@ -85,4 +85,13 @@ custom_structured_configuration_ethernet_interfaces:
    - name: Ethernet6/1
      description: 'connected to ixia'
      speed: 'forced 10000full'
+   - name: Ethernet7/1
+     description: 'connected to ixia'
+     speed: 'forced 10000full'
+   - name: Ethernet8/1
+     description: 'connected to ixia'
+     speed: 'forced 25gfull'
+   - name: Ethernet9/1
+     description: 'connected to ixia'
+     speed: 'forced 25gfull'
  

@@ -119,6 +119,12 @@ custom_structured_configuration_ethernet_interfaces:
    - name: Ethernet7/1
      description: 'connected to ixia'
      speed: 'forced 100gfull'
+   - name: Ethernet8/1
+     description: 'connected to ixia'
+     speed: 'forced 10000full'
+   - name: Ethernet9/1
+     description: 'connected to ixia'
+     speed: 'forced 10000full'
 
 #custom_structured_configuration_router_msdp:
 #  peers:

@@ -4,6 +4,10 @@ l3leaf,btd452,Ethernet2/1,spine,btd556,Ethernet1/1,True
 l3leaf,btd452,Ethernet3/1,spine,btd556,Ethernet2/1,True
 l3leaf,btd452,Ethernet4/1,spine,btd556,Ethernet3/1,True
 l3leaf,btd452,Ethernet6/1,server,dc1-LEAF11,Eth6/1,True
+l3leaf,btd452,Ethernet7/1,server,dc1-LEAF11,Eth7/1,True
+l3leaf,btd452,Ethernet8/1,server,dc1-LEAF11,Eth8/1,True
+l3leaf,btd452,Ethernet9/1,server,dc1-LEAF11,Eth9/1,True
+l3leaf,btd452,Ethernet19/1,server,dc1-LEAF11,Eth19/1,True
 l3leaf,btd453,Ethernet1/1,spine,btd555,Ethernet4/1,True
 l3leaf,btd453,Ethernet2/1,spine,btd556,Ethernet10/1,True
 l3leaf,btd453,Ethernet3/1,spine,btd556,Ethernet11/1,True
@@ -11,6 +15,8 @@ l3leaf,btd453,Ethernet4/1,spine,btd556,Ethernet12/1,True
 l3leaf,btd453,Ethernet5/1,server,dc1-Storage-Po100,Eth2/1,True
 l3leaf,btd453,Ethernet6/1,mlag_peer,btd558,Ethernet6/1,True
 l3leaf,btd453,Ethernet7/1,mlag_peer,btd558,Ethernet7/1,True
+l3leaf,btd453,Ethernet8/1,server,dc1-LEAF32,Eth8/1,True
+l3leaf,btd453,Ethernet9/1,server,dc1-LEAF31,Eth9/1,True
 spine,btd555,Ethernet1/1,l3leaf,btd452,Ethernet1/1,True
 spine,btd555,Ethernet2/1,l3leaf,btp351,Ethernet1/1,True
 spine,btd555,Ethernet3/1,l3leaf,btd558,Ethernet1/1,True
@@ -34,8 +40,13 @@ l3leaf,btd558,Ethernet4/1,spine,btd556,Ethernet9/1,True
 l3leaf,btd558,Ethernet5/1,server,dc1-Storage-Po100,Eth1/1,True
 l3leaf,btd558,Ethernet6/1,mlag_peer,btd453,Ethernet6/1,True
 l3leaf,btd558,Ethernet7/1,mlag_peer,btd453,Ethernet7/1,True
+l3leaf,btd558,Ethernet8/1,server,dc1-LEAF31,Eth8/1,True
+l3leaf,btd558,Ethernet9/1,server,dc1-LEAF31,Eth9/1,True
 l3leaf,btp351,Ethernet1/1,spine,btd555,Ethernet2/1,True
 l3leaf,btp351,Ethernet2/1,spine,btd556,Ethernet4/1,True
 l3leaf,btp351,Ethernet3/1,spine,btd556,Ethernet5/1,True
 l3leaf,btp351,Ethernet4/1,spine,btd556,Ethernet6/1,True
 l3leaf,btp351,Ethernet6/1,server,dc1-LEAF21,Eth6/1,True
+l3leaf,btp351,Ethernet7/1,server,dc1-LEAF21,Eth7/1,True
+l3leaf,btp351,Ethernet8/1,server,dc1-LEAF21,Eth8/1,True
+l3leaf,btp351,Ethernet9/1,server,dc1-LEAF21,Eth9/1,True

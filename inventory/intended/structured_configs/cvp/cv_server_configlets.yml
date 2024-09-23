@@ -31,13 +31,22 @@ cvp_configlets:
     9214\n   no switchport\n   ip address 100.64.102.23/31\n   pim ipv4 sparse-mode\n!\ninterface
     Ethernet6/1\n   description connected to ixia\n   no shutdown\n   speed forced
     10000full\n   switchport trunk allowed vlan 10-19\n   switchport mode trunk\n
-    \  switchport\n!\ninterface Loopback0\n   description EVPN_Overlay_Peering\n   no
-    shutdown\n   ip address 100.64.200.5/32\n!\ninterface Management1\n   description
-    oob_management\n   no shutdown\n   ip address 172.28.137.60/20\n!\ninterface Vlan10\n
-    \  description vlan_10\n   no shutdown\n   mtu 9000\n   ip address 100.0.10.1/26\n
-    \  pim ipv4 sparse-mode\n!\ninterface Vlan11\n   description vlan_11\n   no shutdown\n
-    \  mtu 9000\n   ip address 100.0.11.1/26\n   pim ipv4 sparse-mode\n!\ninterface
-    Vlan12\n   description vlan_12\n   no shutdown\n   mtu 9000\n   ip address 100.0.12.1/26\n
+    \  switchport\n!\ninterface Ethernet7/1\n   description connected to ixia\n   no
+    shutdown\n   speed forced 10000full\n   switchport trunk allowed vlan 10-19\n
+    \  switchport mode trunk\n   switchport\n!\ninterface Ethernet8/1\n   description
+    connected to ixia\n   no shutdown\n   speed forced 25gfull\n   switchport trunk
+    allowed vlan 100-299\n   switchport mode trunk\n   switchport\n!\ninterface Ethernet9/1\n
+    \  description connected to ixia\n   no shutdown\n   speed forced 25gfull\n   switchport
+    trunk allowed vlan 10-19\n   switchport mode trunk\n   switchport\n!\ninterface
+    Ethernet19/1\n   description connected to ixia\n   no shutdown\n   speed forced
+    25gfull\n   switchport trunk allowed vlan 10-19\n   switchport mode trunk\n   switchport\n!\ninterface
+    Loopback0\n   description EVPN_Overlay_Peering\n   no shutdown\n   ip address
+    100.64.200.5/32\n!\ninterface Management1\n   description oob_management\n   no
+    shutdown\n   ip address 172.28.137.60/20\n!\ninterface Vlan10\n   description
+    vlan_10\n   no shutdown\n   mtu 9000\n   ip address 100.0.10.1/26\n   pim ipv4
+    sparse-mode\n!\ninterface Vlan11\n   description vlan_11\n   no shutdown\n   mtu
+    9000\n   ip address 100.0.11.1/26\n   pim ipv4 sparse-mode\n!\ninterface Vlan12\n
+    \  description vlan_12\n   no shutdown\n   mtu 9000\n   ip address 100.0.12.1/26\n
     \  pim ipv4 sparse-mode\n!\ninterface Vlan13\n   description vlan_13\n   no shutdown\n
     \  mtu 9000\n   ip address 100.0.13.1/26\n   pim ipv4 sparse-mode\n!\ninterface
     Vlan14\n   description vlan_14\n   no shutdown\n   mtu 9000\n   ip address 100.0.14.1/26\n
@@ -49,7 +58,7 @@ cvp_configlets:
     Vlan18\n   description vlan_18\n   no shutdown\n   mtu 9000\n   ip address 100.0.18.1/26\n
     \  pim ipv4 sparse-mode\n!\ninterface Vlan19\n   description vlan_19\n   no shutdown\n
     \  mtu 9000\n   ip address 100.0.19.1/26\n   pim ipv4 sparse-mode\n!\nmac address-table
-    aging-time 21600\n!\nip virtual-router mac-address 00:dc:00:00:00:01\n!\nip routing\n!\nip
+    aging-time 21600\n!\nip virtual-router mac-address 00:00:01:01:02:02\n!\nip routing\n!\nip
     prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n   seq 10 permit 100.64.200.0/24 eq 32\n!\nip
     prefix-list prefix_subnets\n   seq 10 permit 100.64.200.0/24 eq 32\n   seq 20
     permit 100.0.0.0/8 eq 26\n!\nip route 10.80.0.0/12 172.28.128.1\nip route 172.16.0.0/12
@@ -114,39 +123,43 @@ cvp_configlets:
     connected to ixia\n   no shutdown\n   speed forced 100gfull\n   channel-group
     61 mode active\n!\ninterface Ethernet7/1\n   description connected to ixia\n   no
     shutdown\n   speed forced 100gfull\n   channel-group 61 mode active\n!\ninterface
-    Loopback0\n   description EVPN_Overlay_Peering\n   no shutdown\n   ip address
-    100.64.200.4/32\n!\ninterface Loopback1\n   description PIM RP\n   ip address
-    2.0.0.1/32\n!\ninterface Management1\n   description oob_management\n   no shutdown\n
-    \  ip address 172.28.137.61/20\n!\ninterface Vlan30\n   description vlan_30\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.30.3/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.30.1\n!\ninterface Vlan31\n   description vlan_31\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.31.3/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.31.1\n!\ninterface Vlan32\n   description vlan_32\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.32.3/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.32.1\n!\ninterface Vlan33\n   description vlan_33\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.33.3/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.33.1\n!\ninterface Vlan34\n   description vlan_34\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.34.3/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.34.1\n!\ninterface Vlan35\n   description vlan_35\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.35.3/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.35.1\n!\ninterface Vlan36\n   description vlan_36\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.36.3/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.36.1\n!\ninterface Vlan37\n   description vlan_37\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.37.3/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.37.1\n!\ninterface Vlan38\n   description vlan_38\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.38.3/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.38.1\n!\ninterface Vlan39\n   description vlan_39\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.39.3/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.39.1\n!\ninterface Vlan4093\n   description
-    MLAG_PEER_L3_PEERING\n   no shutdown\n   mtu 9214\n   ip address 10.2.5.1/31\n
-    \  pim ipv4 sparse-mode\n!\ninterface Vlan4094\n   description MLAG_PEER\n   no
-    shutdown\n   mtu 9214\n   no autostate\n   ip address 10.1.5.1/31\n!\nmac address-table
-    aging-time 21600\n!\nip virtual-router mac-address 00:dc:00:00:00:01\n!\nip routing\n!\nip
-    prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n   seq 10 permit 100.64.200.0/24 eq 32\n!\nip
-    prefix-list PL-LOOPBACKS-PIM-RP\n   seq 10 permit 2.0.0.1/32\n!\nmlag configuration\n
-    \  domain-id STORAGE-LEAFs\n   local-interface Vlan4094\n   peer-address 10.1.5.0\n
-    \  peer-link Port-Channel61\n   reload-delay mlag 300\n   reload-delay non-mlag
-    330\n!\nip route 10.80.0.0/12 172.28.128.1\nip route 172.16.0.0/12 172.28.128.1\nip
+    Ethernet8/1\n   description connected to ixia\n   no shutdown\n   speed forced
+    10000full\n   switchport trunk allowed vlan 200-209, 30\n   switchport mode trunk\n
+    \  switchport\n!\ninterface Ethernet9/1\n   description connected to ixia\n   no
+    shutdown\n   speed forced 10000full\n   switchport trunk allowed vlan 30\n   switchport
+    mode trunk\n   switchport\n!\ninterface Loopback0\n   description EVPN_Overlay_Peering\n
+    \  no shutdown\n   ip address 100.64.200.4/32\n!\ninterface Loopback1\n   description
+    PIM RP\n   ip address 2.0.0.1/32\n!\ninterface Management1\n   description oob_management\n
+    \  no shutdown\n   ip address 172.28.137.61/20\n!\ninterface Vlan30\n   description
+    vlan_30\n   no shutdown\n   mtu 9000\n   ip address 100.0.30.3/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.30.1\n!\ninterface Vlan31\n   description
+    vlan_31\n   no shutdown\n   mtu 9000\n   ip address 100.0.31.3/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.31.1\n!\ninterface Vlan32\n   description
+    vlan_32\n   no shutdown\n   mtu 9000\n   ip address 100.0.32.3/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.32.1\n!\ninterface Vlan33\n   description
+    vlan_33\n   no shutdown\n   mtu 9000\n   ip address 100.0.33.3/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.33.1\n!\ninterface Vlan34\n   description
+    vlan_34\n   no shutdown\n   mtu 9000\n   ip address 100.0.34.3/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.34.1\n!\ninterface Vlan35\n   description
+    vlan_35\n   no shutdown\n   mtu 9000\n   ip address 100.0.35.3/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.35.1\n!\ninterface Vlan36\n   description
+    vlan_36\n   no shutdown\n   mtu 9000\n   ip address 100.0.36.3/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.36.1\n!\ninterface Vlan37\n   description
+    vlan_37\n   no shutdown\n   mtu 9000\n   ip address 100.0.37.3/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.37.1\n!\ninterface Vlan38\n   description
+    vlan_38\n   no shutdown\n   mtu 9000\n   ip address 100.0.38.3/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.38.1\n!\ninterface Vlan39\n   description
+    vlan_39\n   no shutdown\n   mtu 9000\n   ip address 100.0.39.3/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.39.1\n!\ninterface Vlan4093\n
+    \  description MLAG_PEER_L3_PEERING\n   no shutdown\n   mtu 9214\n   ip address
+    10.2.5.1/31\n   pim ipv4 sparse-mode\n!\ninterface Vlan4094\n   description MLAG_PEER\n
+    \  no shutdown\n   mtu 9214\n   no autostate\n   ip address 10.1.5.1/31\n!\nmac
+    address-table aging-time 21600\n!\nip virtual-router mac-address 00:00:01:01:02:02\n!\nip
+    routing\n!\nip prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n   seq 10 permit 100.64.200.0/24
+    eq 32\n!\nip prefix-list PL-LOOPBACKS-PIM-RP\n   seq 10 permit 2.0.0.1/32\n!\nmlag
+    configuration\n   domain-id STORAGE-LEAFs\n   local-interface Vlan4094\n   peer-address
+    10.1.5.0\n   peer-link Port-Channel61\n   reload-delay mlag 300\n   reload-delay
+    non-mlag 330\n!\nip route 10.80.0.0/12 172.28.128.1\nip route 172.16.0.0/12 172.28.128.1\nip
     route 10.239.0.0/16 172.28.128.1\nip route 10.240.0.0/13 172.28.128.1\n!\nroute-map
     RM-CONN-2-BGP permit 10\n   match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n!\nroute-map
     RM-CONN-2-BGP permit 40\n   match ip address prefix-list PL-LOOPBACKS-PIM-RP\n!\nroute-map
@@ -359,39 +372,43 @@ cvp_configlets:
     connected to ixia\n   no shutdown\n   speed forced 100gfull\n   channel-group
     61 mode active\n!\ninterface Ethernet7/1\n   description connected to ixia\n   no
     shutdown\n   speed forced 100gfull\n   channel-group 61 mode active\n!\ninterface
-    Loopback0\n   description EVPN_Overlay_Peering\n   no shutdown\n   ip address
-    100.64.200.3/32\n!\ninterface Loopback1\n   description PIM RP\n   ip address
-    2.0.0.1/32\n!\ninterface Management1\n   description oob_management\n   no shutdown\n
-    \  ip address 172.28.138.14/20\n!\ninterface Vlan30\n   description vlan_30\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.30.2/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.30.1\n!\ninterface Vlan31\n   description vlan_31\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.31.2/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.31.1\n!\ninterface Vlan32\n   description vlan_32\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.32.2/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.32.1\n!\ninterface Vlan33\n   description vlan_33\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.33.2/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.33.1\n!\ninterface Vlan34\n   description vlan_34\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.34.2/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.34.1\n!\ninterface Vlan35\n   description vlan_35\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.35.2/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.35.1\n!\ninterface Vlan36\n   description vlan_36\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.36.2/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.36.1\n!\ninterface Vlan37\n   description vlan_37\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.37.2/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.37.1\n!\ninterface Vlan38\n   description vlan_38\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.38.2/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.38.1\n!\ninterface Vlan39\n   description vlan_39\n
-    \  no shutdown\n   mtu 9000\n   ip address 100.0.39.2/26\n   pim ipv4 sparse-mode\n
-    \  ip virtual-router address 100.0.39.1\n!\ninterface Vlan4093\n   description
-    MLAG_PEER_L3_PEERING\n   no shutdown\n   mtu 9214\n   ip address 10.2.5.0/31\n
-    \  pim ipv4 sparse-mode\n!\ninterface Vlan4094\n   description MLAG_PEER\n   no
-    shutdown\n   mtu 9214\n   no autostate\n   ip address 10.1.5.0/31\n!\nmac address-table
-    aging-time 21600\n!\nip virtual-router mac-address 00:dc:00:00:00:01\n!\nip routing\n!\nip
-    prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n   seq 10 permit 100.64.200.0/24 eq 32\n!\nip
-    prefix-list PL-LOOPBACKS-PIM-RP\n   seq 10 permit 2.0.0.1/32\n!\nmlag configuration\n
-    \  domain-id STORAGE-LEAFs\n   local-interface Vlan4094\n   peer-address 10.1.5.1\n
-    \  peer-link Port-Channel61\n   reload-delay mlag 300\n   reload-delay non-mlag
-    330\n!\nip route 10.80.0.0/12 172.28.128.1\nip route 172.16.0.0/12 172.28.128.1\nip
+    Ethernet8/1\n   description connected to ixia\n   no shutdown\n   speed forced
+    10000full\n   switchport trunk allowed vlan 200-209, 30\n   switchport mode trunk\n
+    \  switchport\n!\ninterface Ethernet9/1\n   description connected to ixia\n   no
+    shutdown\n   speed forced 10000full\n   switchport trunk allowed vlan 30\n   switchport
+    mode trunk\n   switchport\n!\ninterface Loopback0\n   description EVPN_Overlay_Peering\n
+    \  no shutdown\n   ip address 100.64.200.3/32\n!\ninterface Loopback1\n   description
+    PIM RP\n   ip address 2.0.0.1/32\n!\ninterface Management1\n   description oob_management\n
+    \  no shutdown\n   ip address 172.28.138.14/20\n!\ninterface Vlan30\n   description
+    vlan_30\n   no shutdown\n   mtu 9000\n   ip address 100.0.30.2/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.30.1\n!\ninterface Vlan31\n   description
+    vlan_31\n   no shutdown\n   mtu 9000\n   ip address 100.0.31.2/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.31.1\n!\ninterface Vlan32\n   description
+    vlan_32\n   no shutdown\n   mtu 9000\n   ip address 100.0.32.2/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.32.1\n!\ninterface Vlan33\n   description
+    vlan_33\n   no shutdown\n   mtu 9000\n   ip address 100.0.33.2/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.33.1\n!\ninterface Vlan34\n   description
+    vlan_34\n   no shutdown\n   mtu 9000\n   ip address 100.0.34.2/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.34.1\n!\ninterface Vlan35\n   description
+    vlan_35\n   no shutdown\n   mtu 9000\n   ip address 100.0.35.2/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.35.1\n!\ninterface Vlan36\n   description
+    vlan_36\n   no shutdown\n   mtu 9000\n   ip address 100.0.36.2/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.36.1\n!\ninterface Vlan37\n   description
+    vlan_37\n   no shutdown\n   mtu 9000\n   ip address 100.0.37.2/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.37.1\n!\ninterface Vlan38\n   description
+    vlan_38\n   no shutdown\n   mtu 9000\n   ip address 100.0.38.2/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.38.1\n!\ninterface Vlan39\n   description
+    vlan_39\n   no shutdown\n   mtu 9000\n   ip address 100.0.39.2/26\n   pim ipv4
+    sparse-mode\n   ip virtual-router address 100.0.39.1\n!\ninterface Vlan4093\n
+    \  description MLAG_PEER_L3_PEERING\n   no shutdown\n   mtu 9214\n   ip address
+    10.2.5.0/31\n   pim ipv4 sparse-mode\n!\ninterface Vlan4094\n   description MLAG_PEER\n
+    \  no shutdown\n   mtu 9214\n   no autostate\n   ip address 10.1.5.0/31\n!\nmac
+    address-table aging-time 21600\n!\nip virtual-router mac-address 00:00:01:01:02:02\n!\nip
+    routing\n!\nip prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n   seq 10 permit 100.64.200.0/24
+    eq 32\n!\nip prefix-list PL-LOOPBACKS-PIM-RP\n   seq 10 permit 2.0.0.1/32\n!\nmlag
+    configuration\n   domain-id STORAGE-LEAFs\n   local-interface Vlan4094\n   peer-address
+    10.1.5.1\n   peer-link Port-Channel61\n   reload-delay mlag 300\n   reload-delay
+    non-mlag 330\n!\nip route 10.80.0.0/12 172.28.128.1\nip route 172.16.0.0/12 172.28.128.1\nip
     route 10.239.0.0/16 172.28.128.1\nip route 10.240.0.0/13 172.28.128.1\n!\nroute-map
     RM-CONN-2-BGP permit 10\n   match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n!\nroute-map
     RM-CONN-2-BGP permit 40\n   match ip address prefix-list PL-LOOPBACKS-PIM-RP\n!\nroute-map
@@ -455,13 +472,20 @@ cvp_configlets:
     9214\n   no switchport\n   ip address 100.64.102.31/31\n   pim ipv4 sparse-mode\n!\ninterface
     Ethernet6/1\n   description connected to ixia\n   no shutdown\n   speed forced
     10000full\n   switchport trunk allowed vlan 20-29\n   switchport mode trunk\n
-    \  switchport\n!\ninterface Loopback0\n   description EVPN_Overlay_Peering\n   no
-    shutdown\n   ip address 100.64.200.6/32\n!\ninterface Management1\n   description
-    oob_management\n   no shutdown\n   ip address 172.28.138.18/20\n!\ninterface Vlan20\n
-    \  description vlan_20\n   no shutdown\n   mtu 9000\n   ip address 100.0.20.1/26\n
-    \  pim ipv4 sparse-mode\n!\ninterface Vlan21\n   description vlan_21\n   no shutdown\n
-    \  mtu 9000\n   ip address 100.0.21.1/26\n   pim ipv4 sparse-mode\n!\ninterface
-    Vlan22\n   description vlan_22\n   no shutdown\n   mtu 9000\n   ip address 100.0.22.1/26\n
+    \  switchport\n!\ninterface Ethernet7/1\n   description connected to ixia\n   no
+    shutdown\n   speed forced 10000full\n   switchport trunk allowed vlan 20-29\n
+    \  switchport mode trunk\n   switchport\n!\ninterface Ethernet8/1\n   description
+    connected to ixia\n   no shutdown\n   speed forced 25gfull\n   switchport trunk
+    allowed vlan 20-29\n   switchport mode trunk\n   switchport\n!\ninterface Ethernet9/1\n
+    \  description connected to ixia\n   no shutdown\n   speed forced 25gfull\n   switchport
+    trunk allowed vlan 20-29\n   switchport mode trunk\n   switchport\n!\ninterface
+    Loopback0\n   description EVPN_Overlay_Peering\n   no shutdown\n   ip address
+    100.64.200.6/32\n!\ninterface Management1\n   description oob_management\n   no
+    shutdown\n   ip address 172.28.138.18/20\n!\ninterface Vlan20\n   description
+    vlan_20\n   no shutdown\n   mtu 9000\n   ip address 100.0.20.1/26\n   pim ipv4
+    sparse-mode\n!\ninterface Vlan21\n   description vlan_21\n   no shutdown\n   mtu
+    9000\n   ip address 100.0.21.1/26\n   pim ipv4 sparse-mode\n!\ninterface Vlan22\n
+    \  description vlan_22\n   no shutdown\n   mtu 9000\n   ip address 100.0.22.1/26\n
     \  pim ipv4 sparse-mode\n!\ninterface Vlan23\n   description vlan_23\n   no shutdown\n
     \  mtu 9000\n   ip address 100.0.23.1/26\n   pim ipv4 sparse-mode\n!\ninterface
     Vlan24\n   description vlan_24\n   no shutdown\n   mtu 9000\n   ip address 100.0.24.1/26\n
@@ -473,7 +497,7 @@ cvp_configlets:
     Vlan28\n   description vlan_28\n   no shutdown\n   mtu 9000\n   ip address 100.0.28.1/26\n
     \  pim ipv4 sparse-mode\n!\ninterface Vlan29\n   description vlan_29\n   no shutdown\n
     \  mtu 9000\n   ip address 100.0.29.1/26\n   pim ipv4 sparse-mode\n!\nmac address-table
-    aging-time 21600\n!\nip virtual-router mac-address 00:dc:00:00:00:01\n!\nip routing\n!\nip
+    aging-time 21600\n!\nip virtual-router mac-address 00:00:01:01:02:02\n!\nip routing\n!\nip
     prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n   seq 10 permit 100.64.200.0/24 eq 32\n!\nip
     prefix-list prefix_subnets\n   seq 10 permit 100.64.200.0/24 eq 32\n   seq 20
     permit 100.0.0.0/8 eq 26\n!\nip route 10.80.0.0/12 172.28.128.1\nip route 172.16.0.0/12

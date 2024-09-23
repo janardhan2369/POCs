@@ -12,6 +12,16 @@ port_profiles:
   VLAN_LEAF21:
     mode: trunk
     vlans: "20-29" 
+  VLAN_LEAF11_scale:
+    mode: trunk
+    vlans: "100-299"
+  Storage_8:
+    mode: trunk
+    vlans: "200-209, 30"
+  
+  Storage_9:
+    mode: trunk
+    vlans:  "30"
 
 servers:
   - name: dc1-Storage-Po100
@@ -42,3 +52,103 @@ servers:
         switch_ports: [Ethernet6/1]
         switches: [btp351]
         profile: VLAN_LEAF21
+
+  - name: dc1-LEAF11
+    rack: dc1-LEAF11
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth7/1]
+        switch_ports: [Ethernet7/1]
+        switches: [btd452]
+        profile: VLAN_LEAF11
+
+  - name: dc1-LEAF11
+    rack: dc1-LEAF11
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth9/1]
+        switch_ports: [Ethernet9/1]
+        switches: [btd452]
+        profile: VLAN_LEAF11
+  - name: dc1-LEAF11
+    rack: dc1-LEAF11
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth19/1]
+        switch_ports: [Ethernet19/1]
+        switches: [btd452]
+        profile: VLAN_LEAF11 
+
+  - name: dc1-LEAF11
+    rack: dc1-LEAF11
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth8/1]
+        switch_ports: [Ethernet8/1]
+        switches: [btd452]
+        profile: VLAN_LEAF11_scale
+
+  - name: dc1-LEAF21
+    rack: dc1-LEAF21
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth7/1]
+        switch_ports: [Ethernet7/1]
+        switches: [btp351]
+        profile: VLAN_LEAF21
+
+  - name: dc1-LEAF21
+    rack: dc1-LEAF21
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth9/1]
+        switch_ports: [Ethernet9/1]
+        switches: [btp351]
+        profile: VLAN_LEAF21
+
+  - name: dc1-LEAF21
+    rack: dc1-LEAF21
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth8/1]
+        switch_ports: [Ethernet8/1]
+        switches: [btp351]
+        profile: VLAN_LEAF21
+
+  
+  - name: dc1-LEAF31
+    rack: dc1-LEAF31
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth8/1]
+        switch_ports: [Ethernet8/1]
+        switches: [btd558]
+        profile: Storage_8
+
+  - name: dc1-LEAF31
+    rack: dc1-LEAF31
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth9/1]
+        switch_ports: [Ethernet9/1]
+        switches: [btd558]
+        profile: Storage_9
+
+
+  - name: dc1-LEAF32
+    rack: dc1-LEAF32
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth8/1]
+        switch_ports: [Ethernet8/1]
+        switches: [btd453]
+        profile: Storage_8
+
+  - name: dc1-LEAF31
+    rack: dc1-LEAF31
+    adapters:
+    #  - type: nic
+      - endpoint_ports: [Eth9/1]
+        switch_ports: [Ethernet9/1]
+        switches: [btd453]
+        profile: Storage_9

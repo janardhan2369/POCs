@@ -176,6 +176,50 @@ ethernet_interfaces:
   mode: trunk
   vlans: 10-19
   speed: forced 10000full
+- name: Ethernet7/1
+  peer: dc1-LEAF11
+  peer_interface: Eth7/1
+  peer_type: server
+  port_profile: VLAN_LEAF11
+  description: connected to ixia
+  shutdown: false
+  type: switched
+  mode: trunk
+  vlans: 10-19
+  speed: forced 10000full
+- name: Ethernet9/1
+  peer: dc1-LEAF11
+  peer_interface: Eth9/1
+  peer_type: server
+  port_profile: VLAN_LEAF11
+  description: connected to ixia
+  shutdown: false
+  type: switched
+  mode: trunk
+  vlans: 10-19
+  speed: forced 25gfull
+- name: Ethernet19/1
+  peer: dc1-LEAF11
+  peer_interface: Eth19/1
+  peer_type: server
+  port_profile: VLAN_LEAF11
+  description: connected to ixia
+  shutdown: false
+  type: switched
+  mode: trunk
+  vlans: 10-19
+  speed: forced 25gfull
+- name: Ethernet8/1
+  peer: dc1-LEAF11
+  peer_interface: Eth8/1
+  peer_type: server
+  port_profile: VLAN_LEAF11_scale
+  description: connected to ixia
+  shutdown: false
+  type: switched
+  mode: trunk
+  vlans: 100-299
+  speed: forced 25gfull
 loopback_interfaces:
 - name: Loopback0
   description: EVPN_Overlay_Peering
@@ -242,7 +286,7 @@ vlans:
   tenant: test
 ip_igmp_snooping:
   globally_enabled: true
-ip_virtual_router_mac_address: 00:dc:00:00:00:01
+ip_virtual_router_mac_address: 00:00:01:01:02:02
 vlan_interfaces:
 - name: Vlan10
   tenant: test

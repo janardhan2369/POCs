@@ -135,6 +135,15 @@ port_profiles:
   VLAN_LEAF21:
     mode: trunk
     vlans: 20-29
+  VLAN_LEAF11_scale:
+    mode: trunk
+    vlans: 100-299
+  Storage_8:
+    mode: trunk
+    vlans: 200-209, 30
+  Storage_9:
+    mode: trunk
+    vlans: '30'
 servers:
 - name: dc1-Storage-Po100
   rack: dc1-leaf31-Rack1
@@ -172,6 +181,116 @@ servers:
     switches:
     - btp351
     profile: VLAN_LEAF21
+- name: dc1-LEAF11
+  rack: dc1-LEAF11
+  adapters:
+  - endpoint_ports:
+    - Eth7/1
+    switch_ports:
+    - Ethernet7/1
+    switches:
+    - btd452
+    profile: VLAN_LEAF11
+- name: dc1-LEAF11
+  rack: dc1-LEAF11
+  adapters:
+  - endpoint_ports:
+    - Eth9/1
+    switch_ports:
+    - Ethernet9/1
+    switches:
+    - btd452
+    profile: VLAN_LEAF11
+- name: dc1-LEAF11
+  rack: dc1-LEAF11
+  adapters:
+  - endpoint_ports:
+    - Eth19/1
+    switch_ports:
+    - Ethernet19/1
+    switches:
+    - btd452
+    profile: VLAN_LEAF11
+- name: dc1-LEAF11
+  rack: dc1-LEAF11
+  adapters:
+  - endpoint_ports:
+    - Eth8/1
+    switch_ports:
+    - Ethernet8/1
+    switches:
+    - btd452
+    profile: VLAN_LEAF11_scale
+- name: dc1-LEAF21
+  rack: dc1-LEAF21
+  adapters:
+  - endpoint_ports:
+    - Eth7/1
+    switch_ports:
+    - Ethernet7/1
+    switches:
+    - btp351
+    profile: VLAN_LEAF21
+- name: dc1-LEAF21
+  rack: dc1-LEAF21
+  adapters:
+  - endpoint_ports:
+    - Eth9/1
+    switch_ports:
+    - Ethernet9/1
+    switches:
+    - btp351
+    profile: VLAN_LEAF21
+- name: dc1-LEAF21
+  rack: dc1-LEAF21
+  adapters:
+  - endpoint_ports:
+    - Eth8/1
+    switch_ports:
+    - Ethernet8/1
+    switches:
+    - btp351
+    profile: VLAN_LEAF21
+- name: dc1-LEAF31
+  rack: dc1-LEAF31
+  adapters:
+  - endpoint_ports:
+    - Eth8/1
+    switch_ports:
+    - Ethernet8/1
+    switches:
+    - btd558
+    profile: Storage_8
+- name: dc1-LEAF31
+  rack: dc1-LEAF31
+  adapters:
+  - endpoint_ports:
+    - Eth9/1
+    switch_ports:
+    - Ethernet9/1
+    switches:
+    - btd558
+    profile: Storage_9
+- name: dc1-LEAF32
+  rack: dc1-LEAF32
+  adapters:
+  - endpoint_ports:
+    - Eth8/1
+    switch_ports:
+    - Ethernet8/1
+    switches:
+    - btd453
+    profile: Storage_8
+- name: dc1-LEAF31
+  rack: dc1-LEAF31
+  adapters:
+  - endpoint_ports:
+    - Eth9/1
+    switch_ports:
+    - Ethernet9/1
+    switches:
+    - btd453
+    profile: Storage_9
 fabric_name: Fabric-AVD
 underlay_multicast: true
 bgp_peer_groups:
@@ -229,7 +348,7 @@ l3leaf:
     spanning_tree_priority: 16384
     mlag_peer_ipv4_pool: 10.1.5.0/24
     mlag_peer_l3_ipv4_pool: 10.2.5.0/24
-    virtual_router_mac_address: 00:dc:00:00:00:01
+    virtual_router_mac_address: 00:00:01:01:02:02
     mlag_interfaces:
     - Ethernet6/1
     - Ethernet7/1
@@ -423,6 +542,18 @@ custom_structured_configuration_ethernet_interfaces:
 - name: Ethernet6/1
   description: connected to ixia
   speed: forced 10000full
+- name: Ethernet7/1
+  description: connected to ixia
+  speed: forced 10000full
+- name: Ethernet8/1
+  description: connected to ixia
+  speed: forced 25gfull
+- name: Ethernet9/1
+  description: connected to ixia
+  speed: forced 25gfull
+- name: Ethernet19/1
+  description: connected to ixia
+  speed: forced 25gfull
 inventory_file: /home/arista/custom-poc/two-sigma-poc/inventory/inventory.yml
 inventory_dir: /home/arista/custom-poc/two-sigma-poc/inventory
 ansible_host: 172.28.137.60
@@ -443,58 +574,6 @@ svis:
     ip_address: 100.0.10.1/26
 ansible_facts:
   avd_switch_facts:
-    btd555:
-      switch:
-        id: 1
-        type: spine
-        platform: default
-        is_deployed: true
-        mgmt_interface: Management1
-        mgmt_ip: 172.28.138.46/20
-        mpls_lsr: false
-        loopback_ipv4_pool: 1.0.0.0/24
-        bgp_as: '65001'
-        underlay_routing_protocol: ebgp
-        inband_ztp_lacp_fallback_delay: 30
-        router_id: 1.0.0.1
-        evpn_role: none
-        mpls_overlay_role: none
-        overlay:
-          peering_address: 1.0.0.1
-          evpn_mpls: false
-        max_parallel_uplinks: 1
-        max_uplink_switches: 0
-        uplinks: []
-        uplink_peers: []
-        vlans: ''
-        local_endpoint_trunk_groups: []
-        endpoint_trunk_groups: []
-    btd556:
-      switch:
-        id: 2
-        type: spine
-        platform: default
-        is_deployed: true
-        mgmt_interface: Management1
-        mgmt_ip: 172.28.138.47/20
-        mpls_lsr: false
-        loopback_ipv4_pool: 1.0.0.0/24
-        bgp_as: '65001'
-        underlay_routing_protocol: ebgp
-        inband_ztp_lacp_fallback_delay: 30
-        router_id: 1.0.0.2
-        evpn_role: none
-        mpls_overlay_role: none
-        overlay:
-          peering_address: 1.0.0.2
-          evpn_mpls: false
-        max_parallel_uplinks: 1
-        max_uplink_switches: 0
-        uplinks: []
-        uplink_peers: []
-        vlans: ''
-        local_endpoint_trunk_groups: []
-        endpoint_trunk_groups: []
     btd452:
       switch:
         id: 3
@@ -564,8 +643,8 @@ ansible_facts:
           ip_address: 100.64.102.23
           peer_ip_address: 100.64.102.22
         uplink_peers:
-        - btd555
         - btd556
+        - btd555
         vlans: 10-19
         local_endpoint_trunk_groups: []
         endpoint_trunk_groups: []
@@ -638,8 +717,8 @@ ansible_facts:
           ip_address: 100.64.102.31
           peer_ip_address: 100.64.102.30
         uplink_peers:
-        - btd555
         - btd556
+        - btd555
         vlans: 20-29
         local_endpoint_trunk_groups: []
         endpoint_trunk_groups: []
@@ -722,8 +801,8 @@ ansible_facts:
           ip_address: 100.64.102.7
           peer_ip_address: 100.64.102.6
         uplink_peers:
-        - btd555
         - btd556
+        - btd555
         vlans: 30-39
         local_endpoint_trunk_groups: []
         endpoint_trunk_groups: []
@@ -806,76 +885,76 @@ ansible_facts:
           ip_address: 100.64.102.15
           peer_ip_address: 100.64.102.14
         uplink_peers:
-        - btd555
         - btd556
+        - btd555
         vlans: 30-39
+        local_endpoint_trunk_groups: []
+        endpoint_trunk_groups: []
+    btd555:
+      switch:
+        id: 1
+        type: spine
+        platform: default
+        is_deployed: true
+        mgmt_interface: Management1
+        mgmt_ip: 172.28.138.46/20
+        mpls_lsr: false
+        loopback_ipv4_pool: 1.0.0.0/24
+        bgp_as: '65001'
+        underlay_routing_protocol: ebgp
+        inband_ztp_lacp_fallback_delay: 30
+        router_id: 1.0.0.1
+        evpn_role: none
+        mpls_overlay_role: none
+        overlay:
+          peering_address: 1.0.0.1
+          evpn_mpls: false
+        max_parallel_uplinks: 1
+        max_uplink_switches: 0
+        uplinks: []
+        uplink_peers: []
+        vlans: ''
+        local_endpoint_trunk_groups: []
+        endpoint_trunk_groups: []
+    btd556:
+      switch:
+        id: 2
+        type: spine
+        platform: default
+        is_deployed: true
+        mgmt_interface: Management1
+        mgmt_ip: 172.28.138.47/20
+        mpls_lsr: false
+        loopback_ipv4_pool: 1.0.0.0/24
+        bgp_as: '65001'
+        underlay_routing_protocol: ebgp
+        inband_ztp_lacp_fallback_delay: 30
+        router_id: 1.0.0.2
+        evpn_role: none
+        mpls_overlay_role: none
+        overlay:
+          peering_address: 1.0.0.2
+          evpn_mpls: false
+        max_parallel_uplinks: 1
+        max_uplink_switches: 0
+        uplinks: []
+        uplink_peers: []
+        vlans: ''
         local_endpoint_trunk_groups: []
         endpoint_trunk_groups: []
   avd_overlay_peers: {}
   avd_topology_peers:
-    btd555:
-    - btd452
-    - btp351
-    - btd558
-    - btd453
     btd556:
     - btd452
     - btp351
     - btd558
     - btd453
+    btd555:
+    - btd452
+    - btp351
+    - btd558
+    - btd453
 avd_switch_facts:
-  btd555:
-    switch:
-      id: 1
-      type: spine
-      platform: default
-      is_deployed: true
-      mgmt_interface: Management1
-      mgmt_ip: 172.28.138.46/20
-      mpls_lsr: false
-      loopback_ipv4_pool: 1.0.0.0/24
-      bgp_as: '65001'
-      underlay_routing_protocol: ebgp
-      inband_ztp_lacp_fallback_delay: 30
-      router_id: 1.0.0.1
-      evpn_role: none
-      mpls_overlay_role: none
-      overlay:
-        peering_address: 1.0.0.1
-        evpn_mpls: false
-      max_parallel_uplinks: 1
-      max_uplink_switches: 0
-      uplinks: []
-      uplink_peers: []
-      vlans: ''
-      local_endpoint_trunk_groups: []
-      endpoint_trunk_groups: []
-  btd556:
-    switch:
-      id: 2
-      type: spine
-      platform: default
-      is_deployed: true
-      mgmt_interface: Management1
-      mgmt_ip: 172.28.138.47/20
-      mpls_lsr: false
-      loopback_ipv4_pool: 1.0.0.0/24
-      bgp_as: '65001'
-      underlay_routing_protocol: ebgp
-      inband_ztp_lacp_fallback_delay: 30
-      router_id: 1.0.0.2
-      evpn_role: none
-      mpls_overlay_role: none
-      overlay:
-        peering_address: 1.0.0.2
-        evpn_mpls: false
-      max_parallel_uplinks: 1
-      max_uplink_switches: 0
-      uplinks: []
-      uplink_peers: []
-      vlans: ''
-      local_endpoint_trunk_groups: []
-      endpoint_trunk_groups: []
   btd452:
     switch:
       id: 3
@@ -945,8 +1024,8 @@ avd_switch_facts:
         ip_address: 100.64.102.23
         peer_ip_address: 100.64.102.22
       uplink_peers:
-      - btd555
       - btd556
+      - btd555
       vlans: 10-19
       local_endpoint_trunk_groups: []
       endpoint_trunk_groups: []
@@ -1019,8 +1098,8 @@ avd_switch_facts:
         ip_address: 100.64.102.31
         peer_ip_address: 100.64.102.30
       uplink_peers:
-      - btd555
       - btd556
+      - btd555
       vlans: 20-29
       local_endpoint_trunk_groups: []
       endpoint_trunk_groups: []
@@ -1103,8 +1182,8 @@ avd_switch_facts:
         ip_address: 100.64.102.7
         peer_ip_address: 100.64.102.6
       uplink_peers:
-      - btd555
       - btd556
+      - btd555
       vlans: 30-39
       local_endpoint_trunk_groups: []
       endpoint_trunk_groups: []
@@ -1187,19 +1266,71 @@ avd_switch_facts:
         ip_address: 100.64.102.15
         peer_ip_address: 100.64.102.14
       uplink_peers:
-      - btd555
       - btd556
+      - btd555
       vlans: 30-39
+      local_endpoint_trunk_groups: []
+      endpoint_trunk_groups: []
+  btd555:
+    switch:
+      id: 1
+      type: spine
+      platform: default
+      is_deployed: true
+      mgmt_interface: Management1
+      mgmt_ip: 172.28.138.46/20
+      mpls_lsr: false
+      loopback_ipv4_pool: 1.0.0.0/24
+      bgp_as: '65001'
+      underlay_routing_protocol: ebgp
+      inband_ztp_lacp_fallback_delay: 30
+      router_id: 1.0.0.1
+      evpn_role: none
+      mpls_overlay_role: none
+      overlay:
+        peering_address: 1.0.0.1
+        evpn_mpls: false
+      max_parallel_uplinks: 1
+      max_uplink_switches: 0
+      uplinks: []
+      uplink_peers: []
+      vlans: ''
+      local_endpoint_trunk_groups: []
+      endpoint_trunk_groups: []
+  btd556:
+    switch:
+      id: 2
+      type: spine
+      platform: default
+      is_deployed: true
+      mgmt_interface: Management1
+      mgmt_ip: 172.28.138.47/20
+      mpls_lsr: false
+      loopback_ipv4_pool: 1.0.0.0/24
+      bgp_as: '65001'
+      underlay_routing_protocol: ebgp
+      inband_ztp_lacp_fallback_delay: 30
+      router_id: 1.0.0.2
+      evpn_role: none
+      mpls_overlay_role: none
+      overlay:
+        peering_address: 1.0.0.2
+        evpn_mpls: false
+      max_parallel_uplinks: 1
+      max_uplink_switches: 0
+      uplinks: []
+      uplink_peers: []
+      vlans: ''
       local_endpoint_trunk_groups: []
       endpoint_trunk_groups: []
 avd_overlay_peers: {}
 avd_topology_peers:
-  btd555:
+  btd556:
   - btd452
   - btp351
   - btd558
   - btd453
-  btd556:
+  btd555:
   - btd452
   - btp351
   - btd558
@@ -1214,30 +1345,30 @@ groups:
   all:
   - cv_ztp
   - cv_server
-  - btd555
-  - btd556
   - btd452
   - btp351
   - btd558
   - btd453
+  - btd555
+  - btd556
   ungrouped: []
   CVP:
   - cv_ztp
   - cv_server
   DC:
-  - btd555
-  - btd556
   - btd452
   - btp351
   - btd558
   - btd453
+  - btd555
+  - btd556
   Fabric-AVD:
-  - btd555
-  - btd556
   - btd452
   - btp351
   - btd558
   - btd453
+  - btd555
+  - btd556
   SPINES:
   - btd555
   - btd556
@@ -1268,7 +1399,7 @@ groups:
   - btp351
   - btd558
   - btd453
-omit: __omit_place_holder__11dd63f3201b9442d824f192e0921d76e4f1d102
+omit: __omit_place_holder__97773b5b1310d3345d3350846ff60397e60cb66e
 ansible_version:
   string: 2.16.3
   full: 2.16.3

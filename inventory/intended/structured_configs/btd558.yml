@@ -395,6 +395,28 @@ ethernet_interfaces:
   channel_group:
     id: 51
     mode: active
+- name: Ethernet8/1
+  peer: dc1-LEAF31
+  peer_interface: Eth8/1
+  peer_type: server
+  port_profile: Storage_8
+  description: connected to ixia
+  shutdown: false
+  type: switched
+  mode: trunk
+  vlans: 200-209, 30
+  speed: forced 10000full
+- name: Ethernet9/1
+  peer: dc1-LEAF31
+  peer_interface: Eth9/1
+  peer_type: server
+  port_profile: Storage_9
+  description: connected to ixia
+  shutdown: false
+  type: switched
+  mode: trunk
+  vlans: '30'
+  speed: forced 10000full
 mlag_configuration:
   domain_id: STORAGE-LEAFs
   local_interface: Vlan4094
@@ -451,6 +473,6 @@ router_pim_sparse_mode:
     - address: 2.0.0.1
 ip_igmp_snooping:
   globally_enabled: true
-ip_virtual_router_mac_address: 00:dc:00:00:00:01
+ip_virtual_router_mac_address: 00:00:01:01:02:02
 metadata:
   platform: default

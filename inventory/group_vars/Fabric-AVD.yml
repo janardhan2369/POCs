@@ -60,7 +60,7 @@ l3leaf:
     spanning_tree_priority: 16384
     mlag_peer_ipv4_pool: 10.1.5.0/24
     mlag_peer_l3_ipv4_pool: 10.2.5.0/24
-    virtual_router_mac_address: 00:dc:00:00:00:01
+    virtual_router_mac_address: 00:00:01:01:02:02
     mlag_interfaces: ['Ethernet6/1', 'Ethernet7/1']
     bgp_as: 65001
 
